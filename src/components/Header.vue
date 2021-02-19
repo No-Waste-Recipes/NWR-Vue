@@ -7,11 +7,10 @@
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator'
-import { MdButton, MdTabs } from 'vue-material/dist/components'
+import { MdTabs } from 'vue-material/dist/components'
 import 'vue-material/dist/vue-material.min.css'
 import 'vue-material/dist/theme/default.css'
 
-Vue.use(MdButton)
 Vue.use(MdTabs)
 
 @Component
