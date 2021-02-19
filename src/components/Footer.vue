@@ -9,37 +9,31 @@
                 </md-list>
             </div>
             <div class="seperatorLine"/>
-            <div class="md-layout-item">
-                <ul>
-                    <li>
-                        <router-link to="/About">About us</router-link>
-                    </li>
-                    <li>
-                        <router-link to="/About">About us</router-link>
-                    </li>
-                    <li>
-                        <router-link to="/About">About us</router-link>
-                    </li>
-                    <li>
-                        <router-link to="/About">About us</router-link>
-                    </li>
-                </ul>
+            <div class="md-layout-item left">
+                <p>
+                    <span>
+                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur quis pharetra nunc.
+                         Proin nec dui consectetur, tempor erat in, viverra leo. Cras vel malesuada ex. Duis quis luctus urna.
+                         Phasellus pretium ex ut neque cursus, ac posuere urna aliquam. Fusce eu risus orci. Nullam tincidunt vestibulum fringilla.
+                    </span>
+                    <br>
+                    <span>
+                        This is not legal advice.
+                    </span>
+                </p>
             </div>
             <div class="seperatorLine"/>
-            <div class="md-layout-item"><ul>
-                    <li>
-                        <router-link to="/About">About us</router-link>
-                    </li>
-                    <li>
-                        <router-link to="/About">About us</router-link>
-                    </li>
-                    <li>
-                        <router-link to="/About">About us</router-link>
-                    </li>
-                    <li>
-                        <router-link to="/About">About us</router-link>
-                    </li>
-                </ul>
+            <div class="md-layout-item left"><p>
+                    <span>
+                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur quis pharetra nunc.
+                         Proin nec dui consectetur, tempor erat in, viverra leo. Cras vel malesuada ex. Duis quis luctus urna.
+                         Phasellus pretium ex ut neque cursus, ac posuere urna aliquam. Fusce eu risus orci. Nullam tincidunt vestibulum fringilla.
+                    </span>
+                    <br>
+                    <span>
+                        You cant sue us we are not real
+                    </span>
+                </p>
             </div>
         </div>
     </div>
@@ -94,5 +88,8 @@ export default class FooterComponent extends Vue {
     .seperatorLine
         width: 3px
         border-left: 3px solid #75BD84
+    .left
+        text-align: left
+        margin: 15px
 
 </style>
