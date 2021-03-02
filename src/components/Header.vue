@@ -7,11 +7,6 @@
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator'
-import { MdTabs } from 'vue-material/dist/components'
-import 'vue-material/dist/vue-material.min.css'
-import 'vue-material/dist/theme/default.css'
-
-Vue.use(MdTabs)
 
 @Component
 export default class HeaderComponent extends Vue {
