@@ -1,8 +1,13 @@
 <template>
-  <md-tabs id="nav" md-sync-route>
-    <md-tab  v-for="tab in tabs" :key="tab.title" :md-label="tab.title" :to="tab.route" :exact="tab.exact">
-    </md-tab>
-  </md-tabs>
+  <div>
+    <md-tabs id="nav" md-sync-route>
+      <md-tab  v-for="tab in tabs" :key="tab.title" :md-label="tab.title" :to="tab.route" :exact="tab.exact">
+      </md-tab>
+    </md-tabs>
+    <div>
+      <p><span v-if="isLoggedIn"> | <a @click="logout">Logout</a></span> <span v-if="!isLoggedIn">Login</span> </p>
+    </div>
+  </div>
 </template>
 
 <script lang="ts">
@@ -18,6 +23,17 @@ export default class HeaderComponent extends Vue {
         { title: 'F.A.Q', route: '/faq' }
       ]
     }
+  }
+
+  public logout (): void {
+    this.$store.dispatch('logout')
+      .then(() => {
+        this.$router.push('/login')
+      })
+  }
+
+  get isLoggedIn () {
+    return this.$store.getters.isLoggedIn
   }
 }
 </script>
