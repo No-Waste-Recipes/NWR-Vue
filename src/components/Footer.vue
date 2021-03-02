@@ -70,9 +70,13 @@ export default class FooterComponent extends Vue {
         width: 70%
         margin: auto
 
-    .md-layout-item
-        background: #F6F4F5
-        text-align: center
+        .md-layout-item
+            background: #F6F4F5
+            text-align: center
+
+        .left
+        text-align: left
+        margin: 15px
 
     ul
         list-style: none
@@ -80,16 +84,13 @@ export default class FooterComponent extends Vue {
     .md-list
         background-color: #F6F4F5
 
-    .md-list-item
-        text-align: center
-        display: block
-        vertical-align: top
+        .md-list-item
+            text-align: center
+            display: block
+            vertical-align: top
 
     .seperatorLine
         width: 3px
         border-left: 3px solid #75BD84
-    .left
-        text-align: left
-        margin: 15px
 
 </style>
