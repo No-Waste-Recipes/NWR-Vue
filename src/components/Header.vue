@@ -3,10 +3,13 @@
     <md-tabs id="nav" md-sync-route>
       <md-tab  v-for="tab in tabs" :key="tab.title" :md-label="tab.title" :to="tab.route" :exact="tab.exact">
       </md-tab>
+      <md-tab v-if="isLoggedIn" key="logout" md-label="logout" @click="logout">
+      </md-tab>
+      <md-tab v-if="!isLoggedIn" key="login" md-label="login" to="/login">
+      </md-tab>
+      <md-tab v-if="!isLoggedIn" key="register" md-label="register" to="/register">
+      </md-tab>
     </md-tabs>
-    <div>
-      <p><span v-if="isLoggedIn"> | <a @click="logout">Logout</a></span> <span v-if="!isLoggedIn">Login</span> </p>
-    </div>
   </div>
 </template>
 
