@@ -1,15 +1,20 @@
 <template>
   <div id="app">
     <HeaderComponent/>
+    <CreateRecipeComponent/>
     <router-view/>
   </div>
 </template>
 
 <script lang="ts">
 import HeaderComponent from '@/components/Header.vue' // @ is an alias to /src
+import CreateRecipeComponent from '@/components/CreateRecipe.vue'
 
 export default {
-  components: { HeaderComponent }
+  components: {
+    HeaderComponent,
+    CreateRecipeComponent
+  }
 }
 </script>
 
