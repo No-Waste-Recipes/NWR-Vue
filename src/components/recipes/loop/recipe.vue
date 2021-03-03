@@ -1,5 +1,5 @@
 <template>
-  <div class="recipe">
+  <div class="recipe md-elevation-3">
     <h2>{{recipe.name}}</h2>
   </div>
 </template>
@@ -13,6 +13,9 @@ export default {
 }
 </script>
 
-<style scoped>
-
+<style scoped lang="sass">
+  .recipe
+    background-color: #FFF
+    padding: 10px 5px
+    text-align: left
 </style>

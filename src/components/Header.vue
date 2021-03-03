@@ -1,17 +1,20 @@
 <template>
-  <md-tabs id="nav" md-sync-route>
-    <md-tab  v-for="tab in tabs" :key="tab.title" :md-label="tab.title" :to="tab.route" :exact="tab.exact">
-    </md-tab>
-  </md-tabs>
+  <div>
+    <md-tabs id="nav" md-sync-route>
+      <md-tab  v-for="tab in tabs" :key="tab.title" :md-label="tab.title" :to="tab.route" :exact="tab.exact">
+      </md-tab>
+      <md-tab v-if="isLoggedIn" key="logout" md-label="logout" @click="logout">
+      </md-tab>
+      <md-tab v-if="!isLoggedIn" key="login" md-label="login" to="/login">
+      </md-tab>
+      <md-tab v-if="!isLoggedIn" key="register" md-label="register" to="/register">
+      </md-tab>
+    </md-tabs>
+  </div>
 </template>
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator'
-import { MdTabs } from 'vue-material/dist/components'
-import 'vue-material/dist/vue-material.min.css'
-import 'vue-material/dist/theme/default.css'
-
-Vue.use(MdTabs)
 
 @Component
 export default class HeaderComponent extends Vue {
@@ -23,6 +26,17 @@ export default class HeaderComponent extends Vue {
         { title: 'F.A.Q', route: '/faq' }
       ]
     }
+  }
+
+  public logout (): void {
+    this.$store.dispatch('logout')
+      .then(() => {
+        this.$router.push('/login')
+      })
+  }
+
+  get isLoggedIn () {
+    return this.$store.getters.isLoggedIn
   }
 }
 </script>
