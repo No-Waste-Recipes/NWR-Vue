@@ -90,7 +90,7 @@ export default class CreateRecipeComponent extends Vue {
   data () {
     return {
       editor: new Editor({
-        content: '<p>add desription</p>',
+        content: '<p>add description</p>',
         extensions: [
           new BulletList(),
           new Heading({ levels: [2] }),

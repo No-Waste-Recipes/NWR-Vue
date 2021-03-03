@@ -83,6 +83,8 @@ export default {
       text-align: left
       padding: 10px 0
       box-shadow: 0 0 4px #000
+      z-index: 999999
+      background-color: white
 
       .result-tab
         border-bottom: 1px solid #000
