@@ -4,16 +4,7 @@
       <div>
         <div class='md-headline'>Favorited by you</div>
         <div class='block-layout'>
-
-          <div class='recipe-box' v-for="recipe in recipes" :key="recipe.id">
-            <div class='md-title'>
-              {{recipe.name}}
-            </div>
-            <div class='picture'>
-              foto
-            </div>
-          </div>
-
+          <Recipe class='recipe-box' v-for='recipe in recipes' :key='recipe.id' :recipe='recipe'/>
         </div>
       </div>
     </div>
@@ -23,9 +14,9 @@
         <div class='md-headline'>PogChamp Recipes</div>
         <div class='block-layout'>
 
-          <div class='recipe-box' v-for="recipe in recipes" :key="recipe.id">
+          <div class='recipe-box' v-for='recipe in recipes' :key='recipe.id'>
             <div class='md-title'>
-              {{recipe.name}}
+              {{ recipe.name }}
             </div>
             <div class='picture'>
               foto
@@ -43,9 +34,11 @@
 import 'vue-material/dist/vue-material.min.css'
 import 'vue-material/dist/theme/default.css'
 import PopularRecipesService from '@/services/PopularRecipesService'
+import Recipe from '@/components/recipes/loop/recipe'
 
 export default {
   name: 'HomeRecipes',
+  components: { Recipe },
   data () {
     return {
       recipes: []
@@ -68,23 +61,23 @@ export default {
 </script>
 
 <style lang='sass' scoped>
-  .container
-    background-color: #F6F4F5
-    width: 70%
-    padding: 15px
-    margin: auto auto 20px
+.container
+  background-color: #F6F4F5
+  width: 70%
+  padding: 15px
+  margin: auto auto 20px
 
-    .recipe-box
-      width: 250px
-      height: 200px
-      overflow: hidden
-      margin-right: 15px
+  .recipe-box
+    width: 250px
+    height: 200px
+    overflow: hidden
+    margin-right: 15px
 
-    .picture
-      background-color: blue
-      height: 100%
+  .picture
+    background-color: blue
+    height: 100%
 
-    .block-layout
-      display: flex
-      flex-direction: row
+  .block-layout
+    display: flex
+    flex-direction: row
 </style>
