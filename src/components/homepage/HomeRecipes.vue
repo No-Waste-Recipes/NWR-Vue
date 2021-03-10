@@ -11,7 +11,7 @@
 
     <div class='container'>
       <div>
-        <div class='md-headline'>PogChamp Recipes</div>
+        <div class='md-headline'>Popular Recipes</div>
         <div class='block-layout'>
           <Recipe class='recipe-box' v-for='recipe in recipes' :key='recipe.id' :recipe='recipe'/>
         </div>

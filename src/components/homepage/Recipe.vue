@@ -4,7 +4,7 @@
       {{ recipe.name }}
     </div>
     <div class='picture'>
-      Foto whattttttttttttttttttttttttttttt
+      Foto goes here!
     </div>
   </div>
 </template>
