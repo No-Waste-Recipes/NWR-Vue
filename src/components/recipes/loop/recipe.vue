@@ -1,6 +1,6 @@
 <template>
   <div class="recipe md-elevation-3">
-    <h2>{{recipe.name}}</h2>
+    <h2>{{recipe.title}}</h2>
   </div>
 </template>
 
