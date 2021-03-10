@@ -13,16 +13,7 @@
       <div>
         <div class='md-headline'>PogChamp Recipes</div>
         <div class='block-layout'>
-
-          <div class='recipe-box' v-for='recipe in recipes' :key='recipe.id'>
-            <div class='md-title'>
-              {{ recipe.name }}
-            </div>
-            <div class='picture'>
-              foto
-            </div>
-          </div>
-
+          <Recipe class='recipe-box' v-for='recipe in recipes' :key='recipe.id' :recipe='recipe'/>
         </div>
       </div>
     </div>
@@ -67,17 +58,13 @@ export default {
   padding: 15px
   margin: auto auto 20px
 
-  .recipe-box
-    width: 250px
-    height: 200px
-    overflow: hidden
-    margin-right: 15px
-
-  .picture
-    background-color: blue
-    height: 100%
-
   .block-layout
     display: flex
     flex-direction: row
+
+    .recipe-box
+      width: 250px
+      height: 200px
+      overflow: hidden
+      margin-right: 15px
 </style>
