@@ -1,27 +1,36 @@
 <template>
   <div class="searchbar">
-    <div class="searchbar-style md-elevation-3">
-    <input type="text" class="search-input" placeholder="Search" v-model="ingredientName"  @change="getIngredients">
-      <md-icon>visibility</md-icon>
+    <div class="searchbar-styles">
+      <md-field class="search-input" >
+        <label>Search</label>
+        <md-input v-model="ingredientName" @change="getIngredients"></md-input>
+        <md-icon class="icon">search</md-icon>
+      </md-field>
     </div>
-    <div class="search-results" v-if="ingredients.length || selectedIngredients.length">
+    <div class="search-results md-elevation-5" v-if="ingredients.length || selectedIngredients.length">
       <div class="search-results-ingredients-selected-tab result-tab">
-        <h3>Currently selected ingredients:</h3>
+        <h4>Currently selected ingredients:</h4>
         <div class="search-results-ingredients-selected" v-for="(selectedIngredient, index) in selectedIngredients" :key="selectedIngredient.id">
           <div class="search-result-selected-ingredient item" >{{selectedIngredient.name}}
-            <input type="number" id="quantity" class="quantity-ingredient" value="0">
-            <select id="volume-ingredient" name="volume">
-              <option id="grams" value="gram">gram</option>
-              <option value="milliliters">milliliters</option>
-            </select>
-            <div v-on:click="removeSelectedIngredient(index)">
-              <md-icon>clear</md-icon>
+            <md-field class="quantity-ingredient" id="quantity" md-inline>
+              <label class="quantity-ingredient-label">Number</label>
+              <md-input class="quantity-ingredient-input" v-model="inline"></md-input>
+            </md-field>
+                <md-field class="volume-ingredient" id="volume">
+                  <md-select v-model="volume" id="volume-label" placeholder="Hoeveelheid">
+                    <md-option value="gram">gram</md-option>
+                    <md-option value="milliliter">milliliter</md-option>
+                    <md-option value="stuks">stuks</md-option>
+                  </md-select>
+                </md-field>
+            <div class="remove-selected" v-on:click="removeSelectedIngredient(index)">
+              <md-icon class="icon">clear</md-icon>
             </div>
           </div>
         </div>
       </div>
       <div class="search-results-ingredients-search-tab result-tab">
-        <h3>Ingredients:</h3>
+        <h4>Ingredients:</h4>
         <div class="search-results-ingredients-search" v-for="(ingredient, index) in ingredients" :key="ingredient.id">
             <div class="search-result-ingredient-search item" v-on:click="setSelectedIngredient(index)">{{ingredient.name}}</div>
         </div>
@@ -32,6 +41,8 @@
 
 <script>
 import SearchService from '@/services/SearchService'
+import 'vue-material/dist/vue-material.min.css'
+import 'vue-material/dist/theme/default.css'
 
 export default {
   name: 'searchbar',
@@ -40,7 +51,8 @@ export default {
       ingredientName: '',
       ingredients: [],
       selectedIngredients: [],
-      event: {}
+      event: {},
+      volume: ''
     }
   },
   created () {
@@ -75,18 +87,8 @@ export default {
 </script>
 
 <style scoped lang="sass">
-  .quantity-ingredient
-    -webkit-appearance: none
-    -moz-appearance: textfield
-    border: none
-    width: 75px
-    margin: 0px 5px 0px 3px
-    background: #E9E9E9
-
-  .volume-ingredient
-    background: #E9E9E9
-    border: none
-    width: 100px
+  .icon
+    background-color: transparent !important
 
   .searchbar
     position: relative
@@ -97,13 +99,10 @@ export default {
       display: -ms-flexbox
       display: flex
       margin-bottom: 15px
-      background-color: #E9E9E9
 
     .search-input
       border: none
-      background-color: #E9E9E9
       font-size: 20px
-      padding: 5px 10px
       width: 100%
 
     .search-results
@@ -113,8 +112,8 @@ export default {
       border-radius: 10px
       text-align: left
       padding: 10px 0
-      box-shadow: 0 0 4px #000
-      font-size: 17px
+      font-size: 14px
+      margin-top: 15px
 
       .result-tab
         border-bottom: 1px solid #000
@@ -124,19 +123,54 @@ export default {
         &:last-of-type
           border-bottom: 0
 
-        h3
+        h4
           margin: 0
+          text-indent: 5px
 
         .item
-          background-color: rgba(83,83,83, 0.16)
+          background-color: #E9E9E9
           padding: 5px 10px 5px 10px
           margin: 5px
 
         .search-results-ingredients-selected
           display: inline-block
+          position: relative
 
           .search-result-selected-ingredient
             display: inline-block
             background-color: rgba(117, 189, 132, 0.16)
+
+            .quantity-ingredient
+              border: none
+              margin: 0px 5px 0px 3px
+              display: inline-block
+              position: relative
+              padding-top: 0px
+              width: 75px
+              min-height: 20px
+              text-align: center
+
+              .quantity-ingredient-label
+                font-size: 14px
+                bottom: 10px
+                top: 5px
+
+              .quantity-ingredient-input
+                -moz-appearance: textfield
+
+              .quantity-ingredient-input::-webkit-inner-spin-button
+                -webkit-appearance: none
+
+            .volume-ingredient
+              border: none
+              position: relative
+              display: inline-block
+              width: 40%
+              padding-top: 0px
+              margin: 0px 5px 0px 0px
+              min-height: 20px
+
+            .remove-selected
+              display: inline-block
 
 </style>
