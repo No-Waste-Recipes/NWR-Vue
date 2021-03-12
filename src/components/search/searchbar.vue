@@ -94,6 +94,7 @@ export default {
     position: relative
     width: 600px
     margin: 0 auto
+    z-index: 9999
 
     .searchbar-style
       display: -ms-flexbox
@@ -114,6 +115,7 @@ export default {
       padding: 10px 0
       font-size: 14px
       margin-top: 15px
+      background-color: white
 
       .result-tab
         border-bottom: 1px solid #000
