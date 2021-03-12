@@ -1,7 +1,9 @@
 <template>
-  <div class="recipe md-elevation-3">
-    <h2>{{recipe.name}}</h2>
-  </div>
+  <RouterLink :to="{ name: 'RecipeDetail', params: { slug: recipe.slug}}">
+    <div class="recipe md-elevation-3">
+      <h2>{{recipe.title}}</h2>
+    </div>
+  </RouterLink>
 </template>
 
 <script>
