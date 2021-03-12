@@ -1,5 +1,8 @@
 <template>
   <div class="recipe-overview">
+    <div class="recipe-searchbar">
+      <searchbar></searchbar>
+    </div>
     <div class="md-layout md-gutter">
       <div class="md-layout-item md-size-30">
         <div class="filters md-elevation-3">
@@ -18,9 +21,11 @@
 <script >
 import Recipe from '@/components/recipes/loop/recipe'
 import RecipeService from '@/services/RecipeService'
+import Searchbar from '@/components/search/searchbar'
+
 export default {
   name: 'recipes',
-  components: { Recipe },
+  components: { Searchbar, Recipe },
   data () {
     return {
       recipes: []
@@ -31,7 +36,8 @@ export default {
   },
   methods: {
     async getRecipes () {
-      RecipeService.getIngredients(this.$route.query.ingredients)
+      const fullPath = this.$route.fullPath
+      RecipeService.getIngredients(fullPath.split('?')[1])
         .then(
           event => {
             this.$set(this, 'recipes', event.recipes)
@@ -46,6 +52,9 @@ export default {
   .recipe-overview
     width: 1080px
     margin: 0 auto
+
+    .recipe-searchbar
+      margin-bottom: 20px
 
     .recipes
       background-color: rgba(233,233,233, 0.30)
