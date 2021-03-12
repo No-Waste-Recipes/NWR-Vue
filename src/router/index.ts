@@ -5,6 +5,7 @@ import FAQ from '../views/FAQ.vue'
 import Overview from '../views/Overview.vue'
 import Login from '../views/Login.vue'
 import Register from '../views/Register.vue'
+import RecipeDetail from '../views/RecipeDetail.vue'
 
 Vue.use(VueRouter)
 
@@ -44,6 +45,11 @@ const routes: Array<RouteConfig> = [
     path: '/register',
     name: 'Register',
     component: Register
+  },
+  {
+    path: '/recipe/:slug',
+    name: 'RecipeDetail',
+    component: RecipeDetail
   }
 ]
 
