@@ -11,4 +11,10 @@ const getRecipe = async (slug: string) => {
   return res.data
 }
 
-export default { getIngredients, getRecipe }
+const createRecipe = async (recipe: object) => {
+  console.log()
+  const res = await axios.post('http://localhost:3000/recipes', recipe)
+  return res.data
+}
+
+export default { getIngredients, getRecipe, createRecipe }

@@ -5,9 +5,10 @@
         <div class="inputdiv">
             <md-field class="inputField">
                 <label>Title</label>
-                <md-input v-model="type"></md-input>
+                <md-input v-model="title"></md-input>
             </md-field>
             <br/>
+            <!-- TODO maak andere searchbar voor ingredients -->
             <searchbar/>
             <br/>
             <div class="editor">
@@ -47,15 +48,16 @@
 
                     </div>
                 </editor-menu-bar>
-                <editor-content class="editor_content md-elevation-3" :editor="editor" />
+                <editor-content class="editor_content md-elevation-3" :editor="editor" v-model="Description" />
             </div>
+            <!-- TODO maak andere searchbar voor tags -->
             <md-field class="inputField">
                 <label>Tags</label>
-                <md-input v-model="type"></md-input>
+                <md-input v-model="Tags"></md-input>
             </md-field>
             <br>
             <md-button class="button md-elevation-3" v-on:click="saveAndPublish">Publish</md-button>
-            <md-button class="button md-elevation-3" v-on:click="save">Save for later</md-button>
+            <md-button class="button md-elevation-3" v-on:click="Save">Save for later</md-button>
         </div>
     </div>
 </template>
@@ -77,6 +79,7 @@ import searchbar from '@/components/search/searchbar.vue'
 import 'material-design-icons-iconfont/dist/material-design-icons.css'
 import 'vue-material/dist/vue-material.min.css'
 import 'vue-material/dist/theme/default.css'
+import RecipeService from '@/services//RecipeService'
 
 @Component({
   components: {
@@ -87,10 +90,16 @@ import 'vue-material/dist/theme/default.css'
 })
 export default class CreateRecipeComponent extends Vue {
   editor: Editor
+  title: ''
+  Description: ''
+  Tags: []
+  descriptionChanged: boolean
   data () {
     return {
+      descriptionChanged: false,
       editor: new Editor({
         content: '<p>add description</p>',
+        onUpdate: () => { this.descriptionChanged = true },
         extensions: [
           new BulletList(),
           new Heading({ levels: [2] }),
@@ -105,12 +114,39 @@ export default class CreateRecipeComponent extends Vue {
     }
   }
 
-  save () {
-    alert('dit doet nog niks')
+  public checkData (data): boolean {
+    console.log('checking data...')
+    if (data.title === '' || data.title === 'Title') {
+      alert('vul je title in')
+      return false
+    }
+    if (data.Tags === '') {
+      alert('vul je tags in in')
+      return false
+    }
+    return this.descriptionChanged
+  }
+
+  public save (status: string): void{
+    if (status === '') {
+      status = 'PRIVATE'
+    }
+
+    const recipe = {
+      title: this.title,
+      description: this.editor.getHTML(),
+      Tags: this.Tags,
+      userId: 1,
+      status: status
+    }
+    if (this.checkData(recipe)) {
+      console.log('data approved')
+      RecipeService.createRecipe(recipe).then(() => console.log('data send')).catch(() => console.log('er is iets fout gegaan check backend'))
+    }
   }
 
   saveAndPublish () {
-    this.save()
+    this.save('TO_BE_APPROVED')
   }
 
   beforeDestroy () {
