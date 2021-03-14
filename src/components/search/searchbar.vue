@@ -1,6 +1,6 @@
 <template>
   <div class="searchbar">
-    <div class="searchbar-styles">
+    <div class="searchbar-content">
       <md-field class="search-input">
         <label>Search</label>
         <md-input v-model="ingredientName" @change="getIngredients"></md-input>
@@ -16,7 +16,7 @@
              :key="selectedIngredient.id">
           <div class="search-result-selected-ingredient item">{{ selectedIngredient.name }}
             <md-field class="quantity-ingredient" id="quantity" md-inline>
-              <label class="quantity-ingredient-label">Number</label>
+              <label class="label">Number</label>
               <md-input class="quantity-ingredient-input" v-model="inline"></md-input>
             </md-field>
             <md-field class="volume-ingredient" id="volume">
@@ -107,7 +107,7 @@ export default {
   margin: 0 auto
   z-index: 9999
 
-  .searchbar-style
+  .searchbar-content
     display: -ms-flexbox
     display: flex
     margin-bottom: 15px
@@ -163,7 +163,7 @@ export default {
             min-height: 20px
             text-align: center
 
-            .quantity-ingredient-label
+            .label
               font-size: 14px
               bottom: 10px
               top: 5px
