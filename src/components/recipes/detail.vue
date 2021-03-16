@@ -39,9 +39,11 @@
         </div>
       </div>
       <div v-if="loggedIn" class="place-comment">
-        <md-field>
+        <md-field :class="{'md-invalid': this.commentError}">
           <label>Plaats comment</label>
           <md-textarea v-model="commentText"></md-textarea>
+          <span class="md-helper-text">Vul de hier tekst in</span>
+          <span class="md-error">Er is een fout</span>
         </md-field>
         <button v-on:click="placeComment">Submit</button>
       </div>
@@ -58,7 +60,8 @@ export default {
     return {
       recipe: Object,
       commentText: '',
-      loggedIn: this.$store.getters.isLoggedIn
+      loggedIn: this.$store.getters.isLoggedIn,
+      commentError: false
     }
   },
   created () {
@@ -75,12 +78,18 @@ export default {
         )
     },
     async placeComment () {
+      if (!this.commentText) {
+        this.commentError = true
+        return
+      }
+      this.commentError = false
       const data = {
         text: this.commentText
       }
       RecipeService.placeComment(this.$route.params.slug, data, this.$store.state.token)
         .then(
           event => {
+            this.commentText = ''
             this.recipe.comments.push({
               id: event.comment.id,
               recipeId: event.comment.recipeId,
