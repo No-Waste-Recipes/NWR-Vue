@@ -1,42 +1,66 @@
 <template>
-  <div class="searchbar">
-    <div class="searchbar-content">
-      <md-field class="search-input">
-        <label>Search</label>
-        <md-input v-model="ingredientName" @change="getIngredients"></md-input>
-        <div v-on:click="goToOverview">
-          <md-icon class="icon">search</md-icon>
+  <div class="searchComponent">
+    <div class="searchbar">
+      <div class="searchbar-content">
+        <md-field class="search-input">
+          <label>Search</label>
+          <md-input v-model="ingredientName" @change="getIngredients"></md-input>
+          <div v-on:click="goToOverview">
+            <md-icon class="icon">search</md-icon>
+          </div>
+        </md-field>
+      </div>
+      <div class="search-results md-elevation-5" v-if="ingredients.length || (selectedIngredients.length && homepage)">
+        <div class="search-results-ingredients-selected-tab result-tab" v-if="homepage">
+          <h4>Currently selected ingredients:</h4>
+          <div class="search-results-ingredients-selected" v-for="(selectedIngredient, index) in selectedIngredients"
+               :key="selectedIngredient.id">
+            <div class="search-result-selected-ingredient item">{{ selectedIngredient.name }}
+              <md-field class="quantity-ingredient" id="quantity" md-inline>
+                <label class="label">Number</label>
+                <md-input class="quantity-ingredient-input" v-model="inline"></md-input>
+              </md-field>
+              <md-field class="volume-ingredient" id="volume">
+                <md-select v-model="volume" id="volume-label" placeholder="Hoeveelheid">
+                  <md-option value="gram">gram</md-option>
+                  <md-option value="milliliter">milliliter</md-option>
+                  <md-option value="stuks">stuks</md-option>
+                </md-select>
+              </md-field>
+              <div class="remove-selected" v-on:click="removeSelectedIngredient(index)">
+                <md-icon class="icon">clear</md-icon>
+              </div>
+            </div>
+          </div>
         </div>
-      </md-field>
-    </div>
-    <div class="search-results md-elevation-5" v-if="ingredients.length || selectedIngredients.length">
-      <div class="search-results-ingredients-selected-tab result-tab">
-        <h4>Currently selected ingredients:</h4>
-        <div class="search-results-ingredients-selected" v-for="(selectedIngredient, index) in selectedIngredients"
-             :key="selectedIngredient.id">
-          <div class="search-result-selected-ingredient item">{{ selectedIngredient.name }}
-            <md-field class="quantity-ingredient" id="quantity" md-inline>
-              <label class="label">Number</label>
-              <md-input class="quantity-ingredient-input" v-model="inline"></md-input>
-            </md-field>
-            <md-field class="volume-ingredient" id="volume">
-              <md-select v-model="volume" id="volume-label" placeholder="Hoeveelheid">
-                <md-option value="gram">gram</md-option>
-                <md-option value="milliliter">milliliter</md-option>
-                <md-option value="stuks">stuks</md-option>
-              </md-select>
-            </md-field>
-            <div class="remove-selected" v-on:click="removeSelectedIngredient(index)">
-              <md-icon class="icon">clear</md-icon>
+        <div class="search-results-ingredients-search-tab result-tab">
+          <h4>Ingredients:</h4>
+          <div class="search-results-ingredients-search" v-for="(ingredient, index) in ingredients" :key="ingredient.id">
+            <div class="search-result-ingredient-search item" v-on:click="setSelectedIngredient(index)">
+              {{ ingredient.name }}
             </div>
           </div>
         </div>
       </div>
-      <div class="search-results-ingredients-search-tab result-tab">
-        <h4>Ingredients:</h4>
-        <div class="search-results-ingredients-search" v-for="(ingredient, index) in ingredients" :key="ingredient.id">
-          <div class="search-result-ingredient-search item" v-on:click="setSelectedIngredient(index)">
-            {{ ingredient.name }}
+    </div>
+    <div v-if="!homepage" class="ingredients-underneath">
+      <h4>Currently selected ingredients:</h4>
+      <div class="selected-ingredients">
+        <div class="selected-ingredient item" v-for="(selectedIngredient, index) in selectedIngredients"
+             :key="selectedIngredient.id">{{ selectedIngredient.name }}
+          <md-field class="quantity-ingredient quantity" md-inline>
+            <label class="label">Number</label>
+            <md-input class="quantity-ingredient-input"></md-input>
+          </md-field>
+          <md-field class="volume-ingredient volume">
+            <md-select v-model="volume" id="volume-label" placeholder="Hoeveelheid">
+              <md-option value="gram">gram</md-option>
+              <md-option value="milliliter">milliliter</md-option>
+              <md-option value="stuks">stuks</md-option>
+            </md-select>
+          </md-field>
+          <div class="remove-selected" v-on:click="removeSelectedIngredient(index)">
+            <md-icon class="icon">clear</md-icon>
           </div>
         </div>
       </div>
@@ -51,11 +75,15 @@ import 'vue-material/dist/theme/default.css'
 
 export default {
   name: 'searchbar',
+  props: {
+    selectedIngredients: [],
+    homepage: Boolean,
+    searchOpen: Boolean
+  },
   data () {
     return {
       ingredientName: '',
       ingredients: [],
-      selectedIngredients: [],
       event: {},
       volume: ''
     }
@@ -67,12 +95,14 @@ export default {
     removeSelectedIngredient (index) {
       this.ingredients.push(this.selectedIngredients[index])
       this.$delete(this.selectedIngredients, index)
+      this.goToOverview()
     },
     setSelectedIngredient (index) {
       this.selectedIngredients.push(this.ingredients[index])
       this.$delete(this.ingredients, index)
     },
     goToOverview () {
+      this.ingredients = []
       this.$router.push({
         path: 'overview',
         query: { ingredient: this.selectedIngredients.map(e => e.id) }
@@ -101,6 +131,43 @@ export default {
 .icon
   background-color: transparent !important
 
+.ingredients-underneath
+  .selected-ingredients
+    display: inline-block
+    text-align: left
+
+    .selected-ingredient
+      display: inline-block
+      padding: 0 10px
+      background-color: rgba(117, 189, 132, 0.16)
+      margin: 10px
+      max-height: 45px
+      border-radius: 6px
+
+      .remove-selected
+        display: inline-block
+
+      .md-field
+        display: inline-block
+        width: initial
+        padding-top: 0
+        margin-right: 7px
+        height: initial
+        max-height: 30px
+        min-height: 30px
+
+        .label, .md-input
+          font-size: 14px
+
+        &.quantity-ingredient
+          label
+            top: 8px
+
+        &.volume-ingredient
+          width: 70px
+        .md-input.quantity-ingredient-input
+          width: 60px
+
 .searchbar
   position: relative
   width: 600px
@@ -127,6 +194,7 @@ export default {
     font-size: 14px
     margin-top: 15px
     background-color: white
+    z-index: 4
 
     .result-tab
       border-bottom: 1px solid #000
@@ -185,5 +253,4 @@ export default {
 
           .remove-selected
             display: inline-block
-
 </style>

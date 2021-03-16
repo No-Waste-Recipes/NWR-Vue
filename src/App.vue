@@ -21,6 +21,8 @@ export default {
 </script>
 
 <style lang="sass">
+.md-menu-content.md-select-menu
+  z-index: 9999!important
 #app
   font-family: Avenir, Helvetica, Arial, sans-serif
   -webkit-font-smoothing: antialiased
