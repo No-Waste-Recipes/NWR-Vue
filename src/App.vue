@@ -1,7 +1,6 @@
 <template>
   <div id="app">
     <HeaderComponent/>
-    <CreateRecipeComponent/>
     <router-view/>
     <FooterComponent></FooterComponent>
   </div>
@@ -10,13 +9,11 @@
 <script lang="ts">
 import FooterComponent from '@/components/Footer.vue'
 import HeaderComponent from '@/components/Header.vue' // @ is an alias to /src
-import CreateRecipeComponent from '@/components/CreateRecipe.vue'
 
 export default {
   components: {
     HeaderComponent,
-    FooterComponent,
-    CreateRecipeComponent
+    FooterComponent
   }
 }
 </script>
