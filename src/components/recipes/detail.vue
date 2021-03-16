@@ -19,8 +19,8 @@
         <div class="md-layout-item md-size-30">
           <div class="ingredients-block md-elevation-3">
             <h3>Ingredienten</h3>
-            <ul v-for="ingredient in recipe.ingredient" :key="ingredient.id" class="ingredients">
-              <li class="ingredient">{{ingredient.ingredients.name}}</li>
+            <ul v-for="ingredient in recipe.ingredients" :key="ingredient.id" class="ingredients">
+              <li class="ingredient">{{ingredient.ingredient.name}}</li>
             </ul>
           </div>
         </div>
