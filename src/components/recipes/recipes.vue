@@ -1,7 +1,7 @@
 <template>
   <div class="recipe-overview">
     <div class="recipe-searchbar">
-      <searchbar></searchbar>
+      <searchbar :selectedIngredients="ingredients" :homepage="false"></searchbar>
     </div>
     <div class="md-layout md-gutter">
       <div class="md-layout-item md-size-30">
@@ -11,7 +11,15 @@
       </div>
       <div class="md-layout-item">
         <div class="recipes">
-          <recipe v-for="recipe in recipes" :key="recipe.id" :recipe="recipe"></recipe>
+          <div v-if="loading">
+            <md-progress-spinner class="md-accent" md-mode="indeterminate"></md-progress-spinner>
+          </div>
+          <div v-else>
+            <recipe v-show="recipes.length > 0" v-for="recipe in recipes" :key="recipe.id" :recipe="recipe"></recipe>
+            <div v-show="recipes.length < 1" class="no-recipes">
+              <h3>Geen recepten gevonden met deze zoekcriteria</h3>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -28,19 +36,31 @@ export default {
   components: { Searchbar, Recipe },
   data () {
     return {
-      recipes: []
+      recipes: [],
+      ingredients: [],
+      loading: Boolean
     }
   },
   created () {
     this.getRecipes()
   },
+  watch: {
+    $route () {
+      this.getRecipes()
+    }
+  },
   methods: {
     async getRecipes () {
       const fullPath = this.$route.fullPath
+      this.loading = true
       RecipeService.getIngredients(fullPath.split('?')[1])
         .then(
           event => {
             this.$set(this, 'recipes', event.recipes)
+            if (event.ingredients) {
+              this.$set(this, 'ingredients', event.ingredients)
+            }
+            this.loading = false
           }
         )
     }

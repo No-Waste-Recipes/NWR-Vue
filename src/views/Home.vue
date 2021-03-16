@@ -1,7 +1,7 @@
 <template>
   <div class="home">
     <img alt="Vue logo" src="../assets/logo.png">
-    <searchbar/>
+    <searchbar :homepage="true" :selected-ingredients="[]"/>
     <HomeRecipes/>
   </div>
 </template>
