@@ -1,8 +1,10 @@
 <template>
     <div>
-        <h1>Create your recipe</h1>
+        <div class="title">
+          <h1>Create your recipe</h1>
+        </div>
         <hr class="divider"/>
-        <div class="inputdiv">
+        <div class="content">
             <md-field class="inputField">
                 <label>Title</label>
                 <md-input v-model="title"></md-input>
@@ -160,7 +162,7 @@ export default class CreateRecipeComponent extends Vue {
     .divider
         width: 75%
         opacity: 20%
-    .inputdiv
+    .content
         width: 60%
         margin: auto
 

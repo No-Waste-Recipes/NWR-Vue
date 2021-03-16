@@ -54,7 +54,7 @@ const routes: Array<RouteConfig> = [
     component: RecipeDetail
   },
   {
-    path: '/createrecipe',
+    path: '/recipe/create',
     name: 'CreateRecipeView',
     component: CreateRecipeView
   }

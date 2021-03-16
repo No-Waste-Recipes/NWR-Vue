@@ -21,4 +21,4 @@ const placeComment = async (slug: string, data: { text: string }, token: string)
   return res.data
 }
 
-export default { getIngredients, getRecipe, placeComment }
+export default { getIngredients, getRecipe, placeComment, createRecipe }
