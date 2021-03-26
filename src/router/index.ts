@@ -1,10 +1,13 @@
 import Vue from 'vue'
 import VueRouter, { RouteConfig } from 'vue-router'
+import store from '../store/index'
 import Home from '../views/Home.vue'
 import FAQ from '../views/FAQ.vue'
 import Overview from '../views/Overview.vue'
 import Login from '../views/Login.vue'
 import Register from '../views/Register.vue'
+import RecipeDetail from '../views/RecipeDetail.vue'
+import CreateRecipeView from '../views/createRecipeView.vue'
 
 Vue.use(VueRouter)
 
@@ -44,11 +47,33 @@ const routes: Array<RouteConfig> = [
     path: '/register',
     name: 'Register',
     component: Register
+  },
+  {
+    path: '/recipe/:slug',
+    name: 'RecipeDetail',
+    component: RecipeDetail
+  },
+  {
+    path: '/recipe/create',
+    name: 'CreateRecipeView',
+    component: CreateRecipeView
   }
 ]
 
 const router = new VueRouter({
   routes
+})
+
+router.beforeEach((to, from, next) => {
+  if (to.matched.some(record => record.meta.requiresAuth)) {
+    if (store.getters.isLoggedIn) {
+      next()
+      return
+    }
+    next('/login')
+  } else {
+    next()
+  }
 })
 
 export default router
