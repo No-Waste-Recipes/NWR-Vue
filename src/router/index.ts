@@ -8,6 +8,7 @@ import Login from '../views/Login.vue'
 import Register from '../views/Register.vue'
 import RecipeDetail from '../views/RecipeDetail.vue'
 import CreateRecipeView from '../views/createRecipeView.vue'
+import UserProfile from '@/views/UserProfile.vue'
 
 Vue.use(VueRouter)
 
@@ -57,6 +58,11 @@ const routes: Array<RouteConfig> = [
     path: '/recipe/create',
     name: 'CreateRecipeView',
     component: CreateRecipeView
+  },
+  {
+    path: '/profile',
+    name: 'UserProfile',
+    component: UserProfile
   }
 ]
 
