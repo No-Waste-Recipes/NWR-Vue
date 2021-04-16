@@ -11,7 +11,7 @@
     <div class="block image" style="background-image: url('https://www.leukerecepten.nl/wp-content/uploads/2020/10/basis-recept-wafels.jpg')">
     </div>
     <div class="block middle">
-      <md-button v-on:click="addFavoriteRecipes">Ster</md-button>
+      <md-button v-on:click="addFavoriteRecipes">Like</md-button>
       <div class="md-layout md-gutter">
         <div class="md-layout-item description">
           <h2>Description</h2>
@@ -71,13 +71,13 @@ export default {
   },
   methods: {
     async getRecipe () {
-      RecipeService.getRecipe(this.$route.params.slug)
+      await RecipeService.getRecipe(this.$route.params.slug)
         .then(
           event => {
-            console.log(event)
             this.$set(this, 'recipe', event.result)
           }
         )
+      await this.isFavoriteRecipe()
     },
     async placeComment () {
       if (!this.commentText) {
@@ -103,6 +103,11 @@ export default {
             })
           }
         )
+    },
+
+    async isFavoriteRecipe () {
+      const favorite = await PopularRecipesService.getFavoriteRecipe(this.$store.state.token, this.recipe.id)
+      return !(favorite.recipes.length === 0)
     },
 
     async addFavoriteRecipes () {
