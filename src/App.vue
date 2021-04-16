@@ -12,6 +12,7 @@
 import FooterComponent from '@/components/Footer.vue'
 import HeaderComponent from '@/components/Header.vue'
 import { Component, Vue } from 'vue-property-decorator'
+import axios from 'axios'
 
 @Component({
   components: {
@@ -23,6 +24,21 @@ import { Component, Vue } from 'vue-property-decorator'
 export default class App extends Vue {
   get isAdmin () {
     return this.$route.meta.admin
+  }
+
+  created () {
+    axios.interceptors.response.use((response) => {
+      console.log('the response status is:', response.status)
+      return response
+    }, (error) => {
+      if (error.response.status === 401) {
+        console.log('the error response status is:', error.response.status)
+        this.$store.dispatch('logout')
+          .then(() => {
+            this.$router.push('/login')
+          })
+      }
+    })
   }
 }
 </script>
