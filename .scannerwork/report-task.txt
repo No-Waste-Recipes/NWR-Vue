@@ -1,0 +1,6 @@
+projectKey=nowasterecipesfrontend
+serverUrl=http://localhost:9000
+serverVersion=8.8.0.42792
+dashboardUrl=http://localhost:9000/dashboard?id=nowasterecipesfrontend
+ceTaskId=AXjaV-ZrD7RRG3-n6jyB
+ceTaskUrl=http://localhost:9000/api/ce/task?id=AXjaV-ZrD7RRG3-n6jyB

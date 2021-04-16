@@ -49,14 +49,14 @@ const routes: Array<RouteConfig> = [
     component: Register
   },
   {
-    path: '/recipe/:slug',
-    name: 'RecipeDetail',
-    component: RecipeDetail
-  },
-  {
     path: '/recipe/create',
     name: 'CreateRecipeView',
     component: CreateRecipeView
+  },
+  {
+    path: '/recipe/:slug',
+    name: 'RecipeDetail',
+    component: RecipeDetail
   }
 ]
 
