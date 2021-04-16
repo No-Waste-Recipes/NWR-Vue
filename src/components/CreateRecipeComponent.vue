@@ -58,7 +58,7 @@
             </md-field>
             <br>
             <md-button class="button md-elevation-3" v-on:click="saveAndPublish">Publish</md-button>
-            <md-button class="button md-elevation-3" v-on:click="Save">Save for later</md-button>
+            <md-button class="button md-elevation-3" v-on:click="save">Save for later</md-button>
         </div>
     </div>
 </template>
