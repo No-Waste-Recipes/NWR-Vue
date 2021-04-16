@@ -11,7 +11,11 @@
     <div class="block image" style="background-image: url('https://www.leukerecepten.nl/wp-content/uploads/2020/10/basis-recept-wafels.jpg')">
     </div>
     <div class="block middle">
-      <md-button v-on:click="addFavoriteRecipes">Like</md-button>
+      <md-button
+        class='joe-button-blue'
+        v-bind:class="{ 'joe-button-red': uugh }"
+        v-on:click="addFavoriteRecipes()"
+      >Like</md-button>
       <div class="md-layout md-gutter">
         <div class="md-layout-item description">
           <h2>Description</h2>
@@ -63,7 +67,10 @@ export default {
       recipe: Object,
       commentText: '',
       loggedIn: this.$store.getters.isLoggedIn,
-      commentError: false
+      commentError: false,
+
+      activeStyle: 'background-color: blue',
+      uugh: true
     }
   },
   created () {
@@ -105,13 +112,11 @@ export default {
         )
     },
 
-    async isFavoriteRecipe () {
-      const favorite = await PopularRecipesService.getFavoriteRecipe(this.$store.state.token, this.recipe.id)
-      return !(favorite.recipes.length === 0)
-    },
-
     async addFavoriteRecipes () {
       await PopularRecipesService.addFavoriteRecipe(this.$store.state.token, this.recipe.id)
+      const favorite = await PopularRecipesService.getFavoriteRecipe(this.$store.state.token, this.recipe.id)
+      this.uugh = !(favorite.recipes.length === 0)
+      return !(favorite.recipes.length === 0)
     }
   }
 }
@@ -154,6 +159,12 @@ export default {
         padding-top: 10px
 
       &.middle
+
+      .joe-button-blue
+        background-color: blue
+
+      .joe-button-red
+        background-color: red
 
       .ingredients-block
         padding: 5px 20px
