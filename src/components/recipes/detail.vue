@@ -106,7 +106,7 @@ export default {
     },
 
     async addFavoriteRecipes () {
-      await PopularRecipesService.addFavoiteRecipe(this.$store.state.token, this.recipe.id)
+      await PopularRecipesService.addFavoriteRecipe(this.$store.state.token, this.recipe.id)
     }
   }
 }
