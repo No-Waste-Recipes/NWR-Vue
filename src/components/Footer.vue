@@ -52,9 +52,9 @@ export default class FooterComponent extends Vue {
     return {
       links: [
         { text: 'about us', route: '/about' },
-        { text: 'peter', route: '/about' },
-        { text: 'peter', route: '/about' },
-        { text: 'peter', route: '/about' }
+        { text: 'F.A.Q.', route: '/faq' },
+        { text: 'login', route: '/login' },
+        { text: 'register', route: '/register' }
       ]
     }
   }

@@ -11,7 +11,6 @@
 <script lang="ts">
 import FooterComponent from '@/components/Footer.vue'
 import HeaderComponent from '@/components/Header.vue' // @ is an alias to /src
-
 export default {
   components: {
     HeaderComponent,

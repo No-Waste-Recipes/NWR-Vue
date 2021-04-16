@@ -1,19 +1,19 @@
 <template>
   <div>
-    <div class='container'>
+    <div v-if='loggedIn && favoriteRecipes.length !== 0' class='container'>
       <div>
         <div class='md-headline'>Favorited by you</div>
         <div class='block-layout'>
-          <Recipe class='recipe-box' v-for='recipe in recipes' :key='recipe.id' :recipe='recipe'/>
+          <Recipe class='recipe-box' v-for='recipe in favoriteRecipes' :key='recipe.id' :recipe='recipe.recipe'/>
         </div>
       </div>
     </div>
 
     <div class='container'>
       <div>
-        <div class='md-headline'>Popular Recipes</div>
+        <div class='md-headline title'>Popular Recipes</div>
         <div class='block-layout'>
-          <Recipe class='recipe-box' v-for='recipe in recipes' :key='recipe.id' :recipe='recipe'/>
+          <Recipe class='recipe-box' v-for='recipe in popularRecipes' :key='recipe.id' :recipe='recipe'/>
         </div>
       </div>
     </div>
@@ -32,18 +32,30 @@ export default {
   components: { Recipe },
   data () {
     return {
-      recipes: []
+      popularRecipes: [],
+      favoriteRecipes: [],
+      loggedIn: this.$store.getters.isLoggedIn
     }
   },
   created () {
-    this.getRecipes()
+    this.getPopularRecipes()
+    this.getFavoriteRecipes()
   },
   methods: {
-    async getRecipes () {
+    async getPopularRecipes () {
       PopularRecipesService.getPopularRecipes()
         .then(
           event => {
-            this.$set(this, 'recipes', event.recipes)
+            this.$set(this, 'popularRecipes', event.recipes)
+          }
+        )
+    },
+
+    async getFavoriteRecipes () {
+      PopularRecipesService.getFavoriteRecipes(this.$store.state.token)
+        .then(
+          event => {
+            this.$set(this, 'favoriteRecipes', event.recipes)
           }
         )
     }
@@ -57,6 +69,9 @@ export default {
   width: 70%
   padding: 15px
   margin: auto auto 20px
+
+  .title
+    margin-bottom: 15px
 
   .block-layout
     display: flex
