@@ -21,4 +21,9 @@ const placeComment = async (slug: string, data: { text: string }, token: string)
   return res.data
 }
 
-export default { getIngredients, getRecipe, placeComment, createRecipe }
+const deleteComment = async (slug: string, id: number, token: string) => {
+  const res = await axios.delete('http://localhost:3000/recipes/' + slug + '/comment/' + id, { headers: { Authorization: `Bearer ${token}` } })
+  return res.data
+}
+
+export default { getIngredients, getRecipe, placeComment, createRecipe, deleteComment }

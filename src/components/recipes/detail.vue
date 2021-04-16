@@ -14,7 +14,7 @@
       <div class="md-layout md-gutter">
         <div class="md-layout-item description">
           <h2>Description</h2>
-          <p>{{recipe.description}}</p>
+          <p v-html="recipe.description"></p>
         </div>
         <div class="md-layout-item md-size-30">
           <div class="ingredients-block md-elevation-3">
@@ -29,7 +29,10 @@
     <div class="block bottom">
       <div class="comments">
         <h3>Comments</h3>
-        <div v-for="comment in recipe.comments" :key="comment.id" class="comment">
+        <div v-for="(comment, index) in recipe.comments" :key="comment.id" class="comment">
+          <div class="delete-comment" v-if="canShowDelete(comment)" v-on:click="deleteComment(comment, index)">
+            Verwijderen
+          </div>
           <div class="user">
             {{comment.user.username}}
           </div>
@@ -68,11 +71,21 @@ export default {
     this.getRecipe()
   },
   methods: {
+    async deleteComment (comment, index) {
+      RecipeService.deleteComment(this.$route.params.slug, comment.id, this.$store.state.token)
+        .then(
+          event => {
+            this.$delete(this.recipe.comments, index)
+          }
+        )
+    },
+    canShowDelete (comment) {
+      return `${comment.user.id}` === `${this.$store.state.userId}`
+    },
     async getRecipe () {
       RecipeService.getRecipe(this.$route.params.slug)
         .then(
           event => {
-            console.log(event)
             this.$set(this, 'recipe', event.result)
           }
         )
@@ -119,6 +132,13 @@ export default {
           padding: 20px
           border: 3px solid #F6F4F5
           margin: 0px -30px 20px -30px
+
+          .delete-comment
+            text-align: right
+            color: red
+
+            &:hover
+              text-decoration: underline
 
           .user
             font-weight: bold
