@@ -10,10 +10,10 @@
     </div>
     <div class="block image" style="background-image: url('https://www.leukerecepten.nl/wp-content/uploads/2020/10/basis-recept-wafels.jpg')">
     </div>
-    <div class="block middle">
+    <div class="block">
       <md-button
-        class='joe-button-blue'
-        v-bind:class="{ 'joe-button-red': uugh }"
+        class='like-button-unliked'
+        v-bind:class="{ 'like-button-liked': likedStatus }"
         v-on:click="addFavoriteRecipes()"
       >Like</md-button>
       <div class="md-layout md-gutter">
@@ -69,8 +69,7 @@ export default {
       loggedIn: this.$store.getters.isLoggedIn,
       commentError: false,
 
-      activeStyle: 'background-color: blue',
-      uugh: true
+      likedStatus: true
     }
   },
   created () {
@@ -84,7 +83,7 @@ export default {
             this.$set(this, 'recipe', event.result)
           }
         )
-      await this.isFavoriteRecipe()
+      await this.checkFavoriteRecipes()
     },
     async placeComment () {
       if (!this.commentText) {
@@ -114,8 +113,12 @@ export default {
 
     async addFavoriteRecipes () {
       await PopularRecipesService.addFavoriteRecipe(this.$store.state.token, this.recipe.id)
+      await this.checkFavoriteRecipes()
+    },
+
+    async checkFavoriteRecipes () {
       const favorite = await PopularRecipesService.getFavoriteRecipe(this.$store.state.token, this.recipe.id)
-      this.uugh = !(favorite.recipes.length === 0)
+      this.likedStatus = !(favorite.recipes.length === 0)
       return !(favorite.recipes.length === 0)
     }
   }
@@ -158,13 +161,13 @@ export default {
         margin: 0 0 20px 0
         padding-top: 10px
 
-      &.middle
+      .like-button-unliked
+        border: 1px solid black
+        border-radius: 4px
 
-      .joe-button-blue
-        background-color: blue
-
-      .joe-button-red
-        background-color: red
+      .like-button-liked
+        border: 1px solid #75BD84
+        background-color: #75BD84
 
       .ingredients-block
         padding: 5px 20px
