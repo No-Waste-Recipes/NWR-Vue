@@ -9,7 +9,8 @@ export default new Vuex.Store({
     status: '',
     token: localStorage.getItem('token') || '',
     user: {},
-    userId: localStorage.getItem('userId') || ''
+    userId: localStorage.getItem('userId') || '',
+    userRole: localStorage.getItem('role') || ''
   },
   mutations: {
     AuthRequest (state) {
@@ -37,8 +38,8 @@ export default new Vuex.Store({
             const token = resp.data.token
             const user = resp.data.user
             localStorage.setItem('token', token)
-            console.log(user.id)
             localStorage.setItem('userId', user.id)
+            localStorage.setItem('userRole', user.role)
             axios.defaults.headers.common.Authorization = token
             commit('AuthSuccess', { token, user })
             resolve(resp)
@@ -54,6 +55,7 @@ export default new Vuex.Store({
             const user = resp.data.user
             localStorage.setItem('token', token)
             localStorage.setItem('userId', user.id)
+            localStorage.setItem('userRole', user.role)
             axios.defaults.headers.common.Authorization = token
             commit('AuthSuccess', { token, user })
             resolve(resp)
@@ -69,6 +71,8 @@ export default new Vuex.Store({
       return new Promise((resolve) => {
         commit('logout')
         localStorage.removeItem('token')
+        localStorage.removeItem('userId')
+        localStorage.removeItem('userRole')
         delete axios.defaults.headers.common.authorization
         resolve()
       })

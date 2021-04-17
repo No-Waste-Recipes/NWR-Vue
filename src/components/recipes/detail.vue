@@ -1,6 +1,9 @@
 <template>
   <div class="recipe">
     <div class="block top">
+      <div class="delete-recipe" v-if="canDeleteRecipe" v-on:click="deleteRecipe">
+        Verwijderen
+      </div>
       <div class="title">
         <h1>{{recipe.title}}</h1>
       </div>
@@ -71,16 +74,27 @@ export default {
     this.getRecipe()
   },
   methods: {
+    canDeleteRecipe () {
+      return `${this.recipe.user.id}` === `${this.$store.state.userId}` || this.$store.state.userRole === 'ADMIN'
+    },
+    async deleteRecipe () {
+      RecipeService.deleteRecipe(this.recipe.id, this.$store.state.token)
+        .then(
+          () => {
+            this.$router.push('/')
+          }
+        )
+    },
     async deleteComment (comment, index) {
       RecipeService.deleteComment(this.$route.params.slug, comment.id, this.$store.state.token)
         .then(
-          event => {
+          () => {
             this.$delete(this.recipe.comments, index)
           }
         )
     },
     canShowDelete (comment) {
-      return `${comment.user.id}` === `${this.$store.state.userId}`
+      return `${comment.user.id}` === `${this.$store.state.userId}` || this.$store.state.userRole === 'ADMIN'
     },
     async getRecipe () {
       RecipeService.getRecipe(this.$route.params.slug)
@@ -127,6 +141,10 @@ export default {
       background-color: #FFF
       padding: 40px
 
+      .delete-recipe
+        color: red
+        cursor: pointer
+
       .comments
         .comment
           padding: 20px
@@ -136,6 +154,7 @@ export default {
           .delete-comment
             text-align: right
             color: red
+            cursor: pointer
 
             &:hover
               text-decoration: underline
