@@ -68,7 +68,6 @@ export default {
       commentText: '',
       loggedIn: this.$store.getters.isLoggedIn,
       commentError: false,
-
       likedStatus: true
     }
   },
@@ -83,7 +82,7 @@ export default {
             this.$set(this, 'recipe', event.result)
           }
         )
-      await this.checkFavoriteRecipes()
+      this.checkFavoriteRecipes()
     },
     async placeComment () {
       if (!this.commentText) {
