@@ -1,6 +1,9 @@
 <template>
   <div class="recipe">
     <div class="block top">
+      <div class="delete-recipe" v-if="canDeleteRecipe" v-on:click="deleteRecipe">
+        Verwijderen
+      </div>
       <div class="title">
         <h1>{{recipe.title}}</h1>
       </div>
@@ -10,11 +13,16 @@
     </div>
     <div class="block image" style="background-image: url('https://www.leukerecepten.nl/wp-content/uploads/2020/10/basis-recept-wafels.jpg')">
     </div>
-    <div class="block middle">
+    <div class="block">
+      <md-button
+        class='like-button-unliked'
+        v-bind:class="{ 'like-button-liked': likedStatus }"
+        v-on:click="addFavoriteRecipes()"
+      >Like</md-button>
       <div class="md-layout md-gutter">
         <div class="md-layout-item description">
           <h2>Description</h2>
-          <p>{{recipe.description}}</p>
+          <p v-html="recipe.description"></p>
         </div>
         <div class="md-layout-item md-size-30">
           <div class="ingredients-block md-elevation-3">
@@ -29,7 +37,10 @@
     <div class="block bottom">
       <div class="comments">
         <h3>Comments</h3>
-        <div v-for="comment in recipe.comments" :key="comment.id" class="comment">
+        <div v-for="(comment, index) in recipe.comments" :key="comment.id" class="comment">
+          <div class="delete-comment" v-if="canShowDelete(comment)" v-on:click="deleteComment(comment, index)">
+            Verwijderen
+          </div>
           <div class="user">
             {{comment.user.username}}
           </div>
@@ -53,6 +64,7 @@
 
 <script>
 import RecipeService from '@/services/RecipeService'
+import PopularRecipesService from '@/services/PopularRecipesService'
 
 export default {
   name: 'detail',
@@ -61,21 +73,44 @@ export default {
       recipe: Object,
       commentText: '',
       loggedIn: this.$store.getters.isLoggedIn,
-      commentError: false
+      commentError: false,
+      likedStatus: true
     }
   },
   created () {
     this.getRecipe()
   },
   methods: {
+    canDeleteRecipe () {
+      return `${this.recipe.user.id}` === `${this.$store.state.userId}` || this.$store.state.userRole === 'ADMIN'
+    },
+    async deleteRecipe () {
+      RecipeService.deleteRecipe(this.recipe.id, this.$store.state.token)
+        .then(
+          () => {
+            this.$router.push('/')
+          }
+        )
+    },
+    async deleteComment (comment, index) {
+      RecipeService.deleteComment(this.$route.params.slug, comment.id, this.$store.state.token)
+        .then(
+          () => {
+            this.$delete(this.recipe.comments, index)
+          }
+        )
+    },
+    canShowDelete (comment) {
+      return `${comment.user.id}` === `${this.$store.state.userId}` || this.$store.state.userRole === 'ADMIN'
+    },
     async getRecipe () {
-      RecipeService.getRecipe(this.$route.params.slug)
+      await RecipeService.getRecipe(this.$route.params.slug)
         .then(
           event => {
-            console.log(event)
             this.$set(this, 'recipe', event.result)
           }
         )
+      this.checkFavoriteRecipes()
     },
     async placeComment () {
       if (!this.commentText) {
@@ -101,6 +136,17 @@ export default {
             })
           }
         )
+    },
+
+    async addFavoriteRecipes () {
+      await PopularRecipesService.addFavoriteRecipe(this.$store.state.token, this.recipe.id)
+      await this.checkFavoriteRecipes()
+    },
+
+    async checkFavoriteRecipes () {
+      const favorite = await PopularRecipesService.getFavoriteRecipe(this.$store.state.token, this.recipe.id)
+      this.likedStatus = !(favorite.recipes.length === 0)
+      return !(favorite.recipes.length === 0)
     }
   }
 }
@@ -114,11 +160,23 @@ export default {
       background-color: #FFF
       padding: 40px
 
+      .delete-recipe
+        color: red
+        cursor: pointer
+
       .comments
         .comment
           padding: 20px
           border: 3px solid #F6F4F5
           margin: 0px -30px 20px -30px
+
+          .delete-comment
+            text-align: right
+            color: red
+            cursor: pointer
+
+            &:hover
+              text-decoration: underline
 
           .user
             font-weight: bold
@@ -142,7 +200,13 @@ export default {
         margin: 0 0 20px 0
         padding-top: 10px
 
-      &.middle
+      .like-button-unliked
+        border: 1px solid black
+        border-radius: 4px
+
+      .like-button-liked
+        border: 1px solid #75BD84
+        background-color: #75BD84
 
       .ingredients-block
         padding: 5px 20px
