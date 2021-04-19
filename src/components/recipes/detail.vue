@@ -10,7 +10,12 @@
     </div>
     <div class="block image" style="background-image: url('https://www.leukerecepten.nl/wp-content/uploads/2020/10/basis-recept-wafels.jpg')">
     </div>
-    <div class="block middle">
+    <div class="block">
+      <md-button
+        class='like-button-unliked'
+        v-bind:class="{ 'like-button-liked': likedStatus }"
+        v-on:click="addFavoriteRecipes()"
+      >Like</md-button>
       <div class="md-layout md-gutter">
         <div class="md-layout-item description">
           <h2>Description</h2>
@@ -53,6 +58,7 @@
 
 <script>
 import RecipeService from '@/services/RecipeService'
+import PopularRecipesService from '@/services/PopularRecipesService'
 
 export default {
   name: 'detail',
@@ -61,7 +67,8 @@ export default {
       recipe: Object,
       commentText: '',
       loggedIn: this.$store.getters.isLoggedIn,
-      commentError: false
+      commentError: false,
+      likedStatus: true
     }
   },
   created () {
@@ -69,13 +76,13 @@ export default {
   },
   methods: {
     async getRecipe () {
-      RecipeService.getRecipe(this.$route.params.slug)
+      await RecipeService.getRecipe(this.$route.params.slug)
         .then(
           event => {
-            console.log(event)
             this.$set(this, 'recipe', event.result)
           }
         )
+      this.checkFavoriteRecipes()
     },
     async placeComment () {
       if (!this.commentText) {
@@ -101,6 +108,17 @@ export default {
             })
           }
         )
+    },
+
+    async addFavoriteRecipes () {
+      await PopularRecipesService.addFavoriteRecipe(this.$store.state.token, this.recipe.id)
+      await this.checkFavoriteRecipes()
+    },
+
+    async checkFavoriteRecipes () {
+      const favorite = await PopularRecipesService.getFavoriteRecipe(this.$store.state.token, this.recipe.id)
+      this.likedStatus = !(favorite.recipes.length === 0)
+      return !(favorite.recipes.length === 0)
     }
   }
 }
@@ -142,7 +160,13 @@ export default {
         margin: 0 0 20px 0
         padding-top: 10px
 
-      &.middle
+      .like-button-unliked
+        border: 1px solid black
+        border-radius: 4px
+
+      .like-button-liked
+        border: 1px solid #75BD84
+        background-color: #75BD84
 
       .ingredients-block
         padding: 5px 20px
