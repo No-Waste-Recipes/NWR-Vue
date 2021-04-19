@@ -9,6 +9,8 @@
       </md-tab>
       <md-tab v-if="!isLoggedIn" key="register" md-label="register" to="/register">
       </md-tab>
+      <md-tab v-if="isLoggedIn" key="profile" md-label="profile" to="/profile">
+      </md-tab>
     </md-tabs>
   </div>
 </template>
