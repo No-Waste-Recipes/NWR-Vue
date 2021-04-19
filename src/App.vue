@@ -1,20 +1,42 @@
 <template>
   <div id="app">
-    <HeaderComponent/>
+    <HeaderComponent v-if="!isAdmin"/>
     <div class="container">
       <router-view/>
     </div>
-    <FooterComponent></FooterComponent>
+    <FooterComponent v-if="!isAdmin"></FooterComponent>
   </div>
 </template>
 
 <script lang="ts">
 import FooterComponent from '@/components/Footer.vue'
-import HeaderComponent from '@/components/Header.vue' // @ is an alias to /src
-export default {
+import HeaderComponent from '@/components/Header.vue'
+import { Component, Vue } from 'vue-property-decorator'
+import axios from 'axios'
+
+@Component({
   components: {
     HeaderComponent,
     FooterComponent
+  }
+})
+
+export default class App extends Vue {
+  get isAdmin () {
+    return this.$route.meta.admin
+  }
+
+  created () {
+    axios.interceptors.response.use((response) => {
+      return response
+    }, (error) => {
+      if (error.response.status === 401) {
+        this.$store.dispatch('logout')
+          .then(() => {
+            this.$router.push('/login')
+          })
+      }
+    })
   }
 }
 </script>

@@ -1,6 +1,9 @@
 <template>
   <div class="recipe">
     <div class="block top">
+      <div class="delete-recipe" v-if="canDeleteRecipe" v-on:click="deleteRecipe">
+        Verwijderen
+      </div>
       <div class="title">
         <h1>{{recipe.title}}</h1>
       </div>
@@ -19,7 +22,7 @@
       <div class="md-layout md-gutter">
         <div class="md-layout-item description">
           <h2>Description</h2>
-          <p>{{recipe.description}}</p>
+          <p v-html="recipe.description"></p>
         </div>
         <div class="md-layout-item md-size-30">
           <div class="ingredients-block md-elevation-3">
@@ -34,7 +37,10 @@
     <div class="block bottom">
       <div class="comments">
         <h3>Comments</h3>
-        <div v-for="comment in recipe.comments" :key="comment.id" class="comment">
+        <div v-for="(comment, index) in recipe.comments" :key="comment.id" class="comment">
+          <div class="delete-comment" v-if="canShowDelete(comment)" v-on:click="deleteComment(comment, index)">
+            Verwijderen
+          </div>
           <div class="user">
             {{comment.user.username}}
           </div>
@@ -75,6 +81,28 @@ export default {
     this.getRecipe()
   },
   methods: {
+    canDeleteRecipe () {
+      return `${this.recipe.user.id}` === `${this.$store.state.userId}` || this.$store.state.userRole === 'ADMIN'
+    },
+    async deleteRecipe () {
+      RecipeService.deleteRecipe(this.recipe.id, this.$store.state.token)
+        .then(
+          () => {
+            this.$router.push('/')
+          }
+        )
+    },
+    async deleteComment (comment, index) {
+      RecipeService.deleteComment(this.$route.params.slug, comment.id, this.$store.state.token)
+        .then(
+          () => {
+            this.$delete(this.recipe.comments, index)
+          }
+        )
+    },
+    canShowDelete (comment) {
+      return `${comment.user.id}` === `${this.$store.state.userId}` || this.$store.state.userRole === 'ADMIN'
+    },
     async getRecipe () {
       await RecipeService.getRecipe(this.$route.params.slug)
         .then(
@@ -132,11 +160,23 @@ export default {
       background-color: #FFF
       padding: 40px
 
+      .delete-recipe
+        color: red
+        cursor: pointer
+
       .comments
         .comment
           padding: 20px
           border: 3px solid #F6F4F5
           margin: 0px -30px 20px -30px
+
+          .delete-comment
+            text-align: right
+            color: red
+            cursor: pointer
+
+            &:hover
+              text-decoration: underline
 
           .user
             font-weight: bold
