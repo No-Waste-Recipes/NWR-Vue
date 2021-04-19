@@ -9,6 +9,9 @@ import Register from '../views/Register.vue'
 import RecipeDetail from '../views/RecipeDetail.vue'
 import CreateRecipeView from '../views/createRecipeView.vue'
 import UserProfile from '@/views/UserProfile.vue'
+import AdminView from '../views/AdminView.vue'
+import AdminRecipeApprove from '../views/AdminRecipeApprove.vue'
+import AdminRecipeApproveDetail from '../views/AdminRecipeApproveDetail.vue'
 
 Vue.use(VueRouter)
 
@@ -50,6 +53,11 @@ const routes: Array<RouteConfig> = [
     component: Register
   },
   {
+    path: '/recipe/create',
+    name: 'CreateRecipeView',
+    component: CreateRecipeView
+  },
+  {
     path: '/recipe/:slug',
     name: 'RecipeDetail',
     component: RecipeDetail
@@ -63,6 +71,33 @@ const routes: Array<RouteConfig> = [
     path: '/profile',
     name: 'UserProfile',
     component: UserProfile
+  },
+  {
+    path: '/admin',
+    name: 'Admin',
+    component: AdminView,
+    meta: {
+      admin: true,
+      requiresAuth: true
+    }
+  },
+  {
+    path: '/admin/recipe/approve',
+    name: 'AdminRecipeApprove',
+    component: AdminRecipeApprove,
+    meta: {
+      admin: true,
+      requiresAuth: true
+    }
+  },
+  {
+    path: '/admin/recipe/approve/:slug',
+    name: 'AdminRecipeApproveDetail',
+    component: AdminRecipeApproveDetail,
+    meta: {
+      admin: true,
+      requiresAuth: true
+    }
   }
 ]
 

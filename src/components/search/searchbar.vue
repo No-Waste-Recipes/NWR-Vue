@@ -1,16 +1,16 @@
 <template>
   <div class="searchComponent">
-    <div class="searchbar">
+    <div class="searchbar" v-click-outside="searchBar">
       <div class="searchbar-content">
         <md-field class="search-input">
           <label>Search</label>
-          <md-input v-model="ingredientName" @change="getIngredients"></md-input>
+          <md-input v-model="ingredientName" v-on:click="searchOpen = true" v-on:keydown="getIngredients"></md-input>
           <div v-on:click="goToOverview">
             <md-icon class="icon">search</md-icon>
           </div>
         </md-field>
       </div>
-      <div class="search-results md-elevation-5" v-if="ingredients.length || (selectedIngredients.length && homepage)">
+      <div class="search-results md-elevation-5" v-if="searchOpen">
         <div class="search-results-ingredients-selected-tab result-tab" v-if="homepage">
           <h4>Currently selected ingredients:</h4>
           <div class="search-results-ingredients-selected" v-for="(selectedIngredient, index) in selectedIngredients"
@@ -72,26 +72,36 @@
 import SearchService from '@/services/SearchService'
 import 'vue-material/dist/vue-material.min.css'
 import 'vue-material/dist/theme/default.css'
+import vClickOutside from 'v-click-outside'
+import Vue from 'vue'
+Vue.use(vClickOutside)
 
 export default {
   name: 'searchbar',
   props: {
     selectedIngredients: [],
-    homepage: Boolean,
-    searchOpen: Boolean
+    homepage: Boolean
+  },
+  directives: {
+    clickOutside: vClickOutside.directive
   },
   data () {
     return {
       ingredientName: '',
       ingredients: [],
       event: {},
-      volume: ''
+      volume: '',
+      searchOpen: Boolean
     }
   },
   created () {
+    this.searchOpen = false
     this.getIngredients()
   },
   methods: {
+    searchBar () {
+      this.searchOpen = false
+    },
     removeSelectedIngredient (index) {
       this.ingredients.push(this.selectedIngredients[index])
       this.$delete(this.selectedIngredients, index)
@@ -100,6 +110,7 @@ export default {
     setSelectedIngredient (index) {
       this.selectedIngredients.push(this.ingredients[index])
       this.$delete(this.ingredients, index)
+      this.searchOpen = true
     },
     goToOverview () {
       this.ingredients = []
@@ -119,6 +130,7 @@ export default {
           .then(
             event => {
               this.$set(this, 'ingredients', event.ingredients)
+              this.searchOpen = true
             }
           )
       }
