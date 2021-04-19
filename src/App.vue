@@ -28,11 +28,9 @@ export default class App extends Vue {
 
   created () {
     axios.interceptors.response.use((response) => {
-      console.log('the response status is:', response.status)
       return response
     }, (error) => {
       if (error.response.status === 401) {
-        console.log('the error response status is:', error.response.status)
         this.$store.dispatch('logout')
           .then(() => {
             this.$router.push('/login')

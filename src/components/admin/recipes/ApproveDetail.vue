@@ -68,7 +68,3 @@ export default class ApproveDetail extends Vue {
   }
 }
 </script>
-
-<style scoped>
-
-</style>

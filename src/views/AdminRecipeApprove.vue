@@ -9,7 +9,3 @@ export default {
   components: { ApproveList }
 }
 </script>
-
-<style scoped>
-
-</style>
