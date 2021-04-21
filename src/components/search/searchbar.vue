@@ -142,6 +142,7 @@ export default {
 <style scoped lang="sass">
 .icon
   background-color: transparent !important
+  cursor: pointer
 
 .ingredients-underneath
   .selected-ingredients

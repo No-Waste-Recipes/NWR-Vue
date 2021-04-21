@@ -12,6 +12,7 @@ import UserProfile from '@/views/UserProfile.vue'
 import AdminView from '../views/AdminView.vue'
 import AdminRecipeApprove from '../views/AdminRecipeApprove.vue'
 import AdminRecipeApproveDetail from '../views/AdminRecipeApproveDetail.vue'
+import AdminUsersOverview from '../views/AdminUsersOverview.vue'
 
 Vue.use(VueRouter)
 
@@ -77,6 +78,15 @@ const routes: Array<RouteConfig> = [
     }
   },
   {
+    path: '/admin/users',
+    name: 'AdminUserOverview',
+    component: AdminUsersOverview,
+    meta: {
+      admin: true,
+      requiresAuth: true
+    }
+  },
+  {
     path: '/admin/recipe/approve',
     name: 'AdminRecipeApprove',
     component: AdminRecipeApprove,
@@ -103,8 +113,15 @@ const router = new VueRouter({
 router.beforeEach((to, from, next) => {
   if (to.matched.some(record => record.meta.requiresAuth)) {
     if (store.getters.isLoggedIn) {
-      next()
-      return
+      if (to.matched.some(record => record.meta.admin)) {
+        if (store.state.userRole === 'ADMIN') {
+          next()
+          return
+        }
+      } else {
+        next()
+        return
+      }
     }
     next('/login')
   } else {
