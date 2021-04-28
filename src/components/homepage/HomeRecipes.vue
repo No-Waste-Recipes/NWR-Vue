@@ -52,6 +52,8 @@ export default {
     },
 
     async getFavoriteRecipes () {
+      if (!this.loggedIn) return
+
       PopularRecipesService.getFavoriteRecipes(this.$store.state.token)
         .then(
           event => {

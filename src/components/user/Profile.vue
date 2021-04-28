@@ -17,7 +17,7 @@
       <label>Last name</label>
       <md-input v-model="user.last_name" :readonly="!update"></md-input>
     </md-field>
-    <md-field v-if="user.description.length !=0" :md-clearable="update">
+    <md-field v-if="user.description && user.description.length > 0" :md-clearable="update">
       <label>Description</label>
       <md-input v-model="user.description" :readonly="!update"></md-input>
     </md-field>

@@ -10,8 +10,7 @@
                 <md-input v-model="title"></md-input>
             </md-field>
             <br/>
-            <!-- TODO maak andere searchbar voor ingredients -->
-            <searchbar/>
+            <searchbar :homepage="false" :selected-ingredients="ingredient"/>
             <br/>
             <div class="editor">
                 <editor-menu-bar :editor="editor" v-slot="{ commands }">
@@ -59,7 +58,7 @@
             </md-field>
             <br>
             <md-button class="button md-elevation-3" v-on:click="saveAndPublish">Publish</md-button>
-            <md-button class="button md-elevation-3" v-on:click="Save">Save for later</md-button>
+            <md-button class="button md-elevation-3" v-on:click="save">Save for later</md-button>
         </div>
     </div>
 </template>
@@ -94,10 +93,12 @@ export default class CreateRecipeComponent extends Vue {
   editor: Editor
   title: ''
   Description: ''
+  ingredient: []
   Tags: []
   descriptionChanged: boolean
   data () {
     return {
+      ingredient: [],
       descriptionChanged: false,
       editor: new Editor({
         content: '<p>add description</p>',
@@ -137,12 +138,12 @@ export default class CreateRecipeComponent extends Vue {
     const recipe = {
       title: this.title,
       description: this.editor.getHTML(),
+      ingredients: this.ingredient,
       Tags: this.Tags,
       userId: 1,
       status: status
     }
     if (this.checkData(recipe)) {
-      console.log('data approved')
       RecipeService.createRecipe(recipe).then(() => console.log('data send')).catch(() => console.log('er is iets fout gegaan check backend'))
     }
   }
@@ -163,14 +164,13 @@ export default class CreateRecipeComponent extends Vue {
         width: 75%
         opacity: 20%
     .content
-        width: 60%
+        width: 55%
         margin: auto
 
         .icon
             color: black
 
         .inputField
-            width: 50%
             margin: auto
             margin-bottom: 5px
 
@@ -186,7 +186,6 @@ export default class CreateRecipeComponent extends Vue {
             position: relative
             text-align: left
             text-indent: 8px
-            width: 50%
             margin: auto
             padding: 5px
             display: box

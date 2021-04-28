@@ -10,7 +10,7 @@ export default new Vuex.Store({
     token: localStorage.getItem('token') || '',
     user: {},
     userId: localStorage.getItem('userId') || '',
-    userRole: localStorage.getItem('role') || ''
+    userRole: localStorage.getItem('userRole') || ''
   },
   mutations: {
     AuthRequest (state) {
@@ -51,13 +51,12 @@ export default new Vuex.Store({
         commit('AuthRequest')
         axios({ url: 'http://localhost:3000/users/register', data: user, method: 'POST' })
           .then(resp => {
-            const token = resp.data.token
-            const user = resp.data.user
-            localStorage.setItem('token', token)
-            localStorage.setItem('userId', user.id)
-            localStorage.setItem('userRole', user.role)
-            axios.defaults.headers.common.Authorization = token
-            commit('AuthSuccess', { token, user })
+            if (!resp.data.errors) {
+              const token = resp.data.token
+              localStorage.setItem('token', token)
+              axios.defaults.headers.common.Authorization = token
+              commit('AuthSuccess', { token, user })
+            }
             resolve(resp)
           })
           .catch(err => {
