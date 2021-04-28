@@ -54,6 +54,7 @@ export default class FooterComponent extends Vue {
         { text: 'about us', route: '/about' },
         { text: 'F.A.Q.', route: '/faq' },
         { text: 'login', route: '/login' },
+        { text: 'createrecipe', route: '/recipe/create' },
         { text: 'register', route: '/register' }
       ]
     }

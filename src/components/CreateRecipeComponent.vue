@@ -140,11 +140,10 @@ export default class CreateRecipeComponent extends Vue {
       description: this.editor.getHTML(),
       ingredients: this.ingredient,
       Tags: this.Tags,
-      userId: 1,
       status: status
     }
     if (this.checkData(recipe)) {
-      RecipeService.createRecipe(recipe).then(() => console.log('data send')).catch(() => console.log('er is iets fout gegaan check backend'))
+      RecipeService.createRecipe(recipe, this.$store.state.token).then(() => console.log('data send')).catch(() => console.log('er is iets fout gegaan check backend'))
     }
   }
 
