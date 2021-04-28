@@ -15,7 +15,7 @@
             <md-progress-spinner class="md-accent" md-mode="indeterminate"></md-progress-spinner>
           </div>
           <div v-else>
-            <recipe v-show="recipes.length > 0" v-for="recipe in recipes" :key="recipe.id" :recipe="recipe"></recipe>
+            <recipe v-show="recipes.length > 0" v-for="recipe in recipes" :key="recipe.id" :recipe="recipe" :selectedIngredients="ingredients"></recipe>
             <div v-show="recipes.length < 1" class="no-recipes">
               <h3>Geen recepten gevonden met deze zoekcriteria</h3>
             </div>

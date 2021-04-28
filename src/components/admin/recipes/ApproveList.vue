@@ -13,6 +13,7 @@
     <div v-show="approveList.length < 1" class="no-recipes">
       <h2>All recipes have been approved denied</h2>
     </div>
+    <RouterLink :to="{ name: 'Admin'}">Back</RouterLink>
   </div>
 </template>
 
