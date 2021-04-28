@@ -25,6 +25,7 @@ export default class HeaderComponent extends Vue {
       tabs: [
         { title: 'Home', route: '/', exact: true },
         { title: 'About', route: '/about' },
+        { title: 'create recipe', route: '/recipe/create' },
         { title: 'F.A.Q', route: '/faq' }
       ]
     }

@@ -56,7 +56,10 @@ const routes: Array<RouteConfig> = [
   {
     path: '/recipe/create',
     name: 'CreateRecipeView',
-    component: CreateRecipeView
+    component: CreateRecipeView,
+    meta: {
+      requiresAuth: true
+    }
   },
   {
     path: '/recipe/:slug',
