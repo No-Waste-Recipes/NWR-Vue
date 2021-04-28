@@ -1,9 +1,16 @@
 <template>
   <div class="recipe">
     <div class="block top">
-      <div class="delete-recipe" v-if="canDeleteRecipe" v-on:click="deleteRecipe">
+      <div class="delete-recipe" v-if="canDeleteRecipe()" v-on:click="clickDeleteRecipe = true">
         Verwijderen
       </div>
+      <md-dialog-confirm
+        :md-active.sync="clickDeleteRecipe"
+        md-title="Delete your recipe?"
+        md-content="Are you sure that you want to delete your recipe?"
+        md-confirm-text="Yes"
+        md-cancel-text="No"
+        @md-confirm="deleteRecipe" />
       <div class="title">
         <h1>{{recipe.title}}</h1>
       </div>
@@ -74,7 +81,8 @@ export default {
       commentText: '',
       loggedIn: this.$store.getters.isLoggedIn,
       commentError: false,
-      likedStatus: true
+      likedStatus: true,
+      clickDeleteRecipe: false
     }
   },
   created () {
@@ -130,6 +138,7 @@ export default {
               recipeId: event.comment.recipeId,
               text: event.comment.text,
               user: {
+                id: this.$store.state.userId,
                 username: event.comment.user.username
               },
               userId: event.comment.userId

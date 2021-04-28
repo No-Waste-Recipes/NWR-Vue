@@ -8,9 +8,11 @@ import Login from '../views/Login.vue'
 import Register from '../views/Register.vue'
 import RecipeDetail from '../views/RecipeDetail.vue'
 import CreateRecipeView from '../views/createRecipeView.vue'
+import UserProfile from '@/views/UserProfile.vue'
 import AdminView from '../views/AdminView.vue'
 import AdminRecipeApprove from '../views/AdminRecipeApprove.vue'
 import AdminRecipeApproveDetail from '../views/AdminRecipeApproveDetail.vue'
+import AdminUsersOverview from '../views/AdminUsersOverview.vue'
 
 Vue.use(VueRouter)
 
@@ -65,9 +67,23 @@ const routes: Array<RouteConfig> = [
     component: RecipeDetail
   },
   {
+    path: '/profile',
+    name: 'UserProfile',
+    component: UserProfile
+  },
+  {
     path: '/admin',
     name: 'Admin',
     component: AdminView,
+    meta: {
+      admin: true,
+      requiresAuth: true
+    }
+  },
+  {
+    path: '/admin/users',
+    name: 'AdminUserOverview',
+    component: AdminUsersOverview,
     meta: {
       admin: true,
       requiresAuth: true
@@ -94,14 +110,22 @@ const routes: Array<RouteConfig> = [
 ]
 
 const router = new VueRouter({
+  mode: 'history',
   routes
 })
 
 router.beforeEach((to, from, next) => {
   if (to.matched.some(record => record.meta.requiresAuth)) {
     if (store.getters.isLoggedIn) {
-      next()
-      return
+      if (to.matched.some(record => record.meta.admin)) {
+        if (store.state.userRole === 'ADMIN') {
+          next()
+          return
+        }
+      } else {
+        next()
+        return
+      }
     }
     next('/login')
   } else {

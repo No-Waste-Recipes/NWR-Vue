@@ -1,6 +1,7 @@
 <template>
   <div>
     <h4>Register</h4>
+    {{errors}}
     <form @submit.prevent="register">
 
       <label for="username">Username</label>
@@ -50,20 +51,29 @@ export default {
       lastName: '',
       email: '',
       password: '',
-      PasswordConfirmation: ''
+      PasswordConfirmation: '',
+      errors: ''
     }
   },
   methods: {
     register: function () {
       const data = {
         username: this.username,
-        firstName: this.firstName,
-        lastName: this.lastName,
+        // eslint-disable-next-line @typescript-eslint/camelcase
+        first_name: this.firstName,
+        // eslint-disable-next-line @typescript-eslint/camelcase
+        last_name: this.lastName,
         email: this.email,
         password: this.password
       }
       this.$store.dispatch('register', data)
-        .then(() => this.$router.push('/login'))
+        .then(resp => {
+          if (resp.data.errors) {
+            this.errors = resp.data.errors
+          } else {
+            this.$router.push('/login')
+          }
+        })
         .catch(err => console.log(err))
     }
   }
