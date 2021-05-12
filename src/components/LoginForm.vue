@@ -65,7 +65,6 @@ export default {
       }
     },
     login: function () {
-      console.log('reached')
       const email = this.form.email
       const password = this.form.password
       this.$store.dispatch('login', {
@@ -77,9 +76,7 @@ export default {
     },
     validateUser () {
       this.$v.$touch()
-      console.log(!this.$v.$invalid)
       if (!this.$v.$invalid) {
-        console.log('reached')
         this.login()
       }
     }
