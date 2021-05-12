@@ -1,70 +1,132 @@
 <template>
   <div>
-    <h4>Register</h4>
     {{errors}}
-    <form @submit.prevent="register">
+    <form novalidate class="md-layout" @submit.prevent="validateUser">
+      <md-card class="md-layout-item">
+        <md-card-header>
+          <div class="md-title">Register</div>
+        </md-card-header>
 
-      <label for="username">Username</label>
-      <div>
-        <input id="username" type="text" v-model="username" required autofocus>
-      </div>
+        <md-card-content>
+          <md-field :class="getValidationClass('username')">
+            <label for="username">Username</label>
+            <md-input type="text" name="email" id="username" v-model="form.username" />
+            <span class="md-error" v-if="!$v.form.email.required">The email is required</span>
+            <span class="md-error" v-else-if="!$v.form.email.email">Invalid email</span>
+          </md-field>
 
-      <label for="firstName">First Name</label>
-      <div>
-        <input id="firstName" type="text" v-model="firstName" required autofocus>
-      </div>
+          <md-field :class="getValidationClass('firstName')">
+            <label for="firstName">First name</label>
+            <md-input type="text" name="firstName" id="firstName" v-model="form.firstName" />
+            <span class="md-error" v-if="!$v.form.email.required">The email is required</span>
+            <span class="md-error" v-else-if="!$v.form.email.email">Invalid email</span>
+          </md-field>
 
-      <label for="lastName">Last Name</label>
-      <div>
-        <input id="lastName" type="text" v-model="lastName" required autofocus>
-      </div>
+          <md-field :class="getValidationClass('lastName')">
+            <label for="lastName">Last name</label>
+            <md-input type="text" name="lastName" id="lastName" v-model="form.lastName" />
+            <span class="md-error" v-if="!$v.form.email.required">The email is required</span>
+            <span class="md-error" v-else-if="!$v.form.email.email">Invalid email</span>
+          </md-field>
 
-      <label for="email" >E-Mail Address</label>
-      <div>
-        <input id="email" type="email" v-model="email" required>
-      </div>
+          <md-field :class="getValidationClass('email')">
+            <label for="email">Email</label>
+            <md-input type="email" name="email" id="email" autocomplete="email" v-model="form.email" />
+            <span class="md-error" v-if="!$v.form.email.required">The email is required</span>
+            <span class="md-error" v-else-if="!$v.form.email.email">Invalid email</span>
+          </md-field>
 
-      <label for="password">Password</label>
-      <div>
-        <input id="password" type="password" v-model="password" required>
-      </div>
+          <md-field :class="getValidationClass('password')">
+            <label for="password">Password</label>
+            <md-input type="password" name="password" id="password" v-model="form.password" />
+            <span class="md-error" v-if="!$v.form.email.required">The email is required</span>
+            <span class="md-error" v-else-if="!$v.form.email.email">Invalid email</span>
+          </md-field>
 
-      <label for="password-confirm">Confirm Password</label>
-      <div>
-        <input id="password-confirm" type="password" v-model="PasswordConfirmation" required>
-      </div>
+          <md-field :class="getValidationClass('passwordConfirmation')">
+            <label for="passwordConfirmation">Password confirmation</label>
+            <md-input type="password" name="passwordConfirmation" id="passwordConfirmation" v-model="form.passwordConfirmation" />
+            <span class="md-error" v-if="!$v.form.email.required">The email is required</span>
+            <span class="md-error" v-else-if="!$v.form.email.email">Invalid email</span>
+          </md-field>
+        </md-card-content>
 
-      <div>
-        <button type="submit">Register</button>
-      </div>
+        <md-progress-bar md-mode="indeterminate" />
+
+        <md-card-actions>
+          <md-button type="submit" class="md-primary">Register user</md-button>
+        </md-card-actions>
+      </md-card>
     </form>
   </div>
 </template>
 
 <script>
+import { validationMixin } from 'vuelidate'
+import {
+  required,
+  email,
+  minLength
+} from 'vuelidate/lib/validators'
 export default {
   name: 'Register',
-  data () {
-    return {
-      username: '',
-      firstName: '',
-      lastName: '',
-      email: '',
-      password: '',
-      PasswordConfirmation: '',
-      errors: ''
+  mixins: [validationMixin],
+  data: () => ({
+    form: {
+      username: null,
+      firstName: null,
+      lastName: null,
+      email: null,
+      password: null,
+      passwordConfirmation: null
+    }
+  }),
+  validations: {
+    form: {
+      firstName: {
+        required,
+        minLength: minLength(3)
+      },
+      lastName: {
+        required,
+        minLength: minLength(3)
+      },
+      username: {
+        required,
+        minLength: minLength(3)
+      },
+      email: {
+        required,
+        email
+      },
+      password: {
+        required,
+        minLength: minLength(6)
+      },
+      passwordConfirmation: {
+        required
+      }
     }
   },
   methods: {
+    getValidationClass (fieldName) {
+      const field = this.$v.form[fieldName]
+
+      if (field) {
+        return {
+          'md-invalid': field.$invalid && field.$dirty
+        }
+      }
+    },
     register: function () {
       const data = {
-        username: this.username,
+        username: this.form.username,
         // eslint-disable-next-line @typescript-eslint/camelcase
-        first_name: this.firstName,
+        first_name: this.form.firstName,
         // eslint-disable-next-line @typescript-eslint/camelcase
-        last_name: this.lastName,
-        email: this.email,
-        password: this.password
+        last_name: this.form.lastName,
+        email: this.form.email,
+        password: this.form.password
       }
       this.$store.dispatch('register', data)
         .then(resp => {
@@ -75,11 +137,19 @@ export default {
           }
         })
         .catch(err => console.log(err))
+    },
+    validateUser () {
+      this.$v.$touch()
+
+      if (!this.$v.$invalid) {
+        this.register()
+      }
     }
   }
 }
 </script>
 
-<style scoped>
-
+<style scoped lang="sass">
+  form
+    margin: 20px 0
 </style>
