@@ -51,8 +51,6 @@
           </md-field>
         </md-card-content>
 
-        <md-progress-bar md-mode="indeterminate" />
-
         <md-card-actions>
           <md-button type="submit" class="md-primary">Register user</md-button>
         </md-card-actions>
