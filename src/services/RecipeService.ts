@@ -10,9 +10,12 @@ const getRecipe = async (slug: string) => {
   return res.data
 }
 
-const createRecipe = async (recipe: object, token: string) => {
-  console.log()
-  const res = await axios.post('http://localhost:3000/recipes', recipe, { headers: { Authorization: `Bearer ${token}` } })
+const createRecipe = async (recipe: any, token: string) => {
+  const res = await axios.post('http://localhost:3000/recipes', recipe, {
+    headers: {
+      'Content-Type': 'multipart/form-data', Authorization: `Bearer ${token}`
+    }
+  })
   return res.data
 }
 

@@ -18,7 +18,7 @@
         <p v-if="recipe.user">Gemaakt door: <span class="author-name">{{ recipe.user.username }}</span></p>
       </div>
     </div>
-    <div class="block image" style="background-image: url('https://www.leukerecepten.nl/wp-content/uploads/2020/10/basis-recept-wafels.jpg')">
+    <div class="block image" :style="{ backgroundImage: `url(http://localhost:3000/${recipe.photo})` }">
     </div>
     <div class="block">
       <md-button

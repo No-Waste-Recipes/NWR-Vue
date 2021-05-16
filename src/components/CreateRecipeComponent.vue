@@ -5,10 +5,14 @@
         </div>
         <hr class="divider"/>
         <div class="content">
+          <form @submit.prevent="save">
             <md-field class="inputField">
                 <label>Title</label>
                 <md-input v-model="title"></md-input>
             </md-field>
+            <div class="form-group">
+              <input type="file" name="photo" @change="uploadFile">
+            </div>
             <br/>
             <searchbar :homepage="false" :selected-ingredients="ingredient"/>
             <br/>
@@ -59,6 +63,7 @@
             <br>
             <md-button class="button md-elevation-3" v-on:click="saveAndPublish">Publish</md-button>
             <md-button class="button md-elevation-3" v-on:click="save">Save for later</md-button>
+          </form>
         </div>
     </div>
 </template>
@@ -96,8 +101,10 @@ export default class CreateRecipeComponent extends Vue {
   ingredient: []
   Tags: []
   descriptionChanged: boolean
+  file: ''
   data () {
     return {
+      files: null,
       ingredient: [],
       descriptionChanged: false,
       editor: new Editor({
@@ -115,6 +122,11 @@ export default class CreateRecipeComponent extends Vue {
         ]
       })
     }
+  }
+
+  public uploadFile (event) {
+    console.log(event)
+    this.file = event.target.files[0]
   }
 
   public checkData (data): boolean {
@@ -135,16 +147,15 @@ export default class CreateRecipeComponent extends Vue {
       status = 'PRIVATE'
     }
 
-    const recipe = {
-      title: this.title,
-      description: this.editor.getHTML(),
-      ingredients: this.ingredient,
-      Tags: this.Tags,
-      status: status
-    }
-    if (this.checkData(recipe)) {
-      RecipeService.createRecipe(recipe, this.$store.state.token).then(() => console.log('data send')).catch(() => console.log('er is iets fout gegaan check backend'))
-    }
+    const formData = new FormData()
+    formData.append('photo', this.file)
+    formData.append('title', this.title)
+    formData.append('description', this.editor.getHTML())
+    formData.append('ingredients', JSON.stringify(this.ingredient))
+    formData.append('Tags', JSON.stringify(this.Tags))
+    formData.append('status', status)
+
+    RecipeService.createRecipe(formData, this.$store.state.token).then(() => console.log('data send')).catch(() => console.log('er is iets fout gegaan check backend'))
   }
 
   saveAndPublish () {
