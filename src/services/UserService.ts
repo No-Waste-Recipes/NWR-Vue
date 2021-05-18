@@ -14,4 +14,14 @@ const deleteUserProfile = async (token: string) => {
   const res = await axios.delete('http://localhost:3000/users', { headers: { Authorization: `Bearer ${token}` } })
   return res.data
 }
-export default { getUserProfile, updateUserProfile, deleteUserProfile }
+
+const getMyRecipes = async (token: string) => {
+  const res = await axios.get('http://localhost:3000/users/myrecipes', { headers: { Authorization: `Bearer ${token}` } })
+  return res.data
+}
+export default {
+  getUserProfile,
+  updateUserProfile,
+  deleteUserProfile,
+  getMyRecipes
+}
