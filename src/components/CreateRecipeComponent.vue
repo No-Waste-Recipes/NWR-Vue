@@ -10,9 +10,14 @@
                 <label>Title</label>
                 <md-input v-model="title"></md-input>
             </md-field>
-            <div class="form-group">
-              <input type="file" name="photo" @change="uploadFile">
+            <div id="preview">
+              <label>Image preview</label>
+              <div v-if="this.file" :style="{ backgroundImage: `url(${getFileUrl()})` }" />
             </div>
+            <md-field>
+              <label>Header image</label>
+              <md-file @change="uploadFile" />
+            </md-field>
             <br/>
             <searchbar :homepage="false" :selected-ingredients="ingredient"/>
             <br/>
@@ -104,7 +109,7 @@ export default class CreateRecipeComponent extends Vue {
   file: ''
   data () {
     return {
-      files: null,
+      file: null,
       ingredient: [],
       descriptionChanged: false,
       editor: new Editor({
@@ -125,8 +130,11 @@ export default class CreateRecipeComponent extends Vue {
   }
 
   public uploadFile (event) {
-    console.log(event)
     this.file = event.target.files[0]
+  }
+
+  public getFileUrl () {
+    return URL.createObjectURL(this.file)
   }
 
   public checkData (data): boolean {
@@ -161,10 +169,6 @@ export default class CreateRecipeComponent extends Vue {
   saveAndPublish () {
     this.save('TO_BE_APPROVED')
   }
-
-  beforeDestroy () {
-    this.editor.destroy()
-  }
 }
 </script>
 
@@ -177,14 +181,18 @@ export default class CreateRecipeComponent extends Vue {
         width: 55%
         margin: auto
 
+        #preview > div
+          height: 400px
+          background-position: center
+          background-size: cover
+
         .icon
             color: black
 
         .inputField
-            margin: auto
-            margin-bottom: 5px
+          margin: auto auto 5px
 
-            .is-active
+          .is-active
                 background-color:#000000 50%
                 border: 1px solid black
 
