@@ -88,7 +88,6 @@ export default {
   },
   created () {
     this.getRecipe()
-    this.checkFavoriteRecipes()
   },
   methods: {
     canDeleteRecipe () {
@@ -118,10 +117,7 @@ export default {
         .then(
           event => {
             this.$set(this, 'recipe', event.result)
-
-            if (this.loggedIn) {
-              this.checkFavoriteRecipes()
-            }
+            this.checkFavoriteRecipes()
           }
         )
     },
@@ -160,9 +156,7 @@ export default {
     async checkFavoriteRecipes () {
       if (this.loggedIn) {
         const favorite = await PopularRecipesService.getFavoriteRecipe(this.$store.state.token, this.recipe.id)
-        console.log(favorite)
         this.likedStatus = !(favorite.recipes.length === 0)
-        return !(favorite.recipes.length === 0)
       }
     }
   }
