@@ -73,10 +73,8 @@
             </md-field>
             <br>
             <md-card-actions>
-              <md-button type="submit" class="md-primary">Login</md-button>
+              <md-button type="submit" class="md-primary">Opslaan</md-button>
             </md-card-actions>
-            <md-button class="button md-elevation-3" v-on:click="saveAndPublish">Publish</md-button>
-            <md-button class="button md-elevation-3" v-on:click="save">Save for later</md-button>
           </form>
         </div>
     </div>
