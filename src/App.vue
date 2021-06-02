@@ -1,14 +1,18 @@
 <template>
-  <div id="app">
-    <HeaderComponent v-if="!isAdmin"/>
-    <div class="container">
-      <router-view/>
+  <div id='app'>
+    <HeaderComponent v-if='!isAdmin'/>
+    <div class='wrapper'>
+      <div class='container'>
+        <router-view/>
+      </div>
+      <div class='push'></div>
     </div>
-    <FooterComponent v-if="!isAdmin"></FooterComponent>
+
+    <FooterComponent class='footer' v-if='!isAdmin'></FooterComponent>
   </div>
 </template>
 
-<script lang="ts">
+<script lang='ts'>
 import FooterComponent from '@/components/Footer.vue'
 import HeaderComponent from '@/components/Header.vue'
 import { Component, Vue } from 'vue-property-decorator'
@@ -41,10 +45,18 @@ export default class App extends Vue {
 }
 </script>
 
-<style lang="sass">
+<style lang='sass'>
+body
+  margin: 0
+  padding: 0
+  height: 100%
+
 .md-menu-content.md-select-menu
-  z-index: 9999!important
+  z-index: 9999 !important
+
 #app
+  height: 100%
+  width: 100%
   font-family: Avenir, Helvetica, Arial, sans-serif
   -webkit-font-smoothing: antialiased
   -moz-osx-font-smoothing: grayscale
@@ -69,4 +81,11 @@ export default class App extends Vue {
 
     @media (min-width: 1200px)
       max-width: 1140px
+
+.wrapper
+  min-height: 100%
+  margin-bottom: -300px
+
+.footer, .push
+  height: 300px
 </style>
