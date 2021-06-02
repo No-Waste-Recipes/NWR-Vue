@@ -5,14 +5,28 @@
         </div>
         <hr class="divider"/>
         <div class="content">
-            <md-field class="inputField">
+          <form @submit.prevent="validateRecipe">
+            <md-field class="inputField" :class="{'md-invalid': this.titleError}">
                 <label>Title</label>
                 <md-input v-model="title"></md-input>
+                <span class="md-error" v-if="titleError">Invalid title</span>
+            </md-field>
+            <div id="preview">
+              <label>Image preview</label>
+              <div v-if="this.file" :style="{ backgroundImage: `url(${getFileUrl()})` }" />
+            </div>
+            <md-field class="inputField" :class="{'md-invalid': this.fileError}">
+              <label>Header image</label>
+              <md-file @change="uploadFile" />
+              <span class="md-error" v-if="fileError">File missing</span>
             </md-field>
             <br/>
-            <searchbar :homepage="false" :selected-ingredients="ingredient"/>
+            <div :class="{'md-invalid': this.ingredientError}">
+              <searchbar :homepage="false" :selected-ingredients="ingredient"/>
+              <span class="md-error" v-if="ingredientError">No ingredients selected</span>
+            </div>
             <br/>
-            <div class="editor">
+            <div class="editor" :class="{'md-invalid': this.DescriptionError}">
                 <editor-menu-bar :editor="editor" v-slot="{ commands }">
                     <div class="menubar md-elevation-1">
                         <md-button class="md-icon-button" :md-ripple="false" @click="commands.bold">
@@ -50,14 +64,17 @@
                     </div>
                 </editor-menu-bar>
                 <editor-content class="editor_content md-elevation-3" :editor="editor" v-model="Description" />
+                <span class="md-error" v-if="DescriptionError">Invalid description</span>
             </div>
             <md-field class="inputField">
                 <label>Tags</label>
                 <md-input v-model="Tags"></md-input>
             </md-field>
             <br>
-            <md-button class="button md-elevation-3" v-on:click="saveAndPublish">Publish</md-button>
-            <md-button class="button md-elevation-3" v-on:click="save">Save for later</md-button>
+            <md-card-actions>
+              <md-button type="submit" class="md-primary">Opslaan</md-button>
+            </md-card-actions>
+          </form>
         </div>
     </div>
 </template>
@@ -90,16 +107,29 @@ import RecipeService from '@/services//RecipeService'
 })
 export default class CreateRecipeComponent extends Vue {
   editor: Editor
-  title: ''
+  title: '';
+  titleError: boolean;
   Description: ''
+  DescriptionError: boolean
+  ingredientError: boolean
   ingredient: []
   Tags: []
   descriptionChanged: boolean
   isediting: false
 
+  file: ''
+  fileError: boolean
   data () {
     return {
+      title: '',
+      titleError: null,
+      file: '',
+      fileError: null,
+      Description: '',
+      DescriptionError: null,
+      Tags: [],
       ingredient: [],
+      ingredientError: null,
       descriptionChanged: false,
       editor: new Editor({
         content: '<p>add description</p>',
@@ -118,17 +148,35 @@ export default class CreateRecipeComponent extends Vue {
     }
   }
 
-  public checkData (data): boolean {
-    console.log('checking data...')
-    if (data.title === '' || data.title === 'Title') {
-      alert('vul je title in')
-      return false
+  public uploadFile (event) {
+    this.file = event.target.files[0]
+  }
+
+  public getFileUrl () {
+    return URL.createObjectURL(this.file)
+  }
+
+  public checkData (): void {
+    let error = false
+    this.titleError = false
+    if (this.title === '') {
+      this.titleError = true
+      error = true
     }
-    if (data.Tags === '') {
-      alert('vul je tags in in')
-      return false
+    if (this.file === '') {
+      this.fileError = true
+      error = true
     }
-    return this.descriptionChanged
+    if (!this.descriptionChanged) {
+      this.DescriptionError = true
+      error = true
+    }
+    if (this.ingredient.length === 0) {
+      this.ingredientError = true
+      error = true
+    }
+    if (error) return
+    this.save('')
   }
 
   public save (status: string): void{
@@ -136,30 +184,32 @@ export default class CreateRecipeComponent extends Vue {
       status = 'PRIVATE'
     }
 
-    const recipe = {
-      title: this.title,
-      description: this.editor.getHTML(),
-      ingredients: this.ingredient,
-      Tags: this.Tags,
-      status: status
-    }
-    if (this.checkData(recipe)) {
-      RecipeService.createRecipe(recipe, this.$store.state.token).then(() => console.log('data send')).catch(() => console.log('er is iets fout gegaan check backend'))
-    }
+    const formData = new FormData()
+    formData.append('photo', this.file)
+    formData.append('title', this.title)
+    formData.append('description', this.editor.getHTML())
+    formData.append('ingredients', JSON.stringify(this.ingredient))
+    formData.append('Tags', JSON.stringify(this.Tags))
+    formData.append('status', status)
+
+    RecipeService.createRecipe(formData, this.$store.state.token).then(() => this.$router.push('/')).catch(() => console.log('er is iets fout gegaan check backend'))
+  }
+
+  validateRecipe () {
+    this.checkData()
   }
 
   saveAndPublish () {
     this.save('TO_BE_APPROVED')
-  }
-
-  beforeDestroy () {
-    this.editor.destroy()
   }
 }
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="sass">
+    .md-error
+      color: #ff1744
+
     .divider
         width: 75%
         opacity: 20%
@@ -167,14 +217,18 @@ export default class CreateRecipeComponent extends Vue {
         width: 55%
         margin: auto
 
+        #preview > div
+          height: 400px
+          background-position: center
+          background-size: cover
+
         .icon
             color: black
 
         .inputField
-            margin: auto
-            margin-bottom: 5px
+          margin: auto auto 5px
 
-            .is-active
+          .is-active
                 background-color:#000000 50%
                 border: 1px solid black
 
