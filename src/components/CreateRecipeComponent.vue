@@ -51,7 +51,6 @@
                 </editor-menu-bar>
                 <editor-content class="editor_content md-elevation-3" :editor="editor" v-model="Description" />
             </div>
-            <!-- TODO maak andere searchbar voor tags -->
             <md-field class="inputField">
                 <label>Tags</label>
                 <md-input v-model="Tags"></md-input>
@@ -96,6 +95,8 @@ export default class CreateRecipeComponent extends Vue {
   ingredient: []
   Tags: []
   descriptionChanged: boolean
+  isediting: false
+
   data () {
     return {
       ingredient: [],

@@ -4,6 +4,8 @@
       <div class="delete-recipe" v-if="canDeleteRecipe()" v-on:click="clickDeleteRecipe = true">
         Verwijderen
       </div>
+
+      <RouterLink :to="{ name: 'CreateRecipeView', params: { slug: recipe.slug }}"> </RouterLink>
       <md-dialog-confirm
         :md-active.sync="clickDeleteRecipe"
         md-title="Delete your recipe?"
@@ -18,6 +20,7 @@
         <p v-if="recipe.user">Gemaakt door: <span class="author-name">{{ recipe.user.username }}</span></p>
       </div>
     </div>
+
     <div class="block image" style="background-image: url('https://www.leukerecepten.nl/wp-content/uploads/2020/10/basis-recept-wafels.jpg')">
     </div>
     <div class="block">
