@@ -22,6 +22,7 @@
     </div>
     <div class="block">
       <md-button
+        v-if='loggedIn'
         class='like-button-unliked'
         v-bind:class="{ 'like-button-liked': likedStatus }"
         v-on:click="addFavoriteRecipes()"
@@ -81,7 +82,7 @@ export default {
       commentText: '',
       loggedIn: this.$store.getters.isLoggedIn,
       commentError: false,
-      likedStatus: true,
+      likedStatus: null,
       clickDeleteRecipe: false
     }
   },
@@ -116,9 +117,9 @@ export default {
         .then(
           event => {
             this.$set(this, 'recipe', event.result)
+            this.checkFavoriteRecipes()
           }
         )
-      this.checkFavoriteRecipes()
     },
     async placeComment () {
       if (!this.commentText) {
@@ -153,9 +154,10 @@ export default {
     },
 
     async checkFavoriteRecipes () {
-      const favorite = await PopularRecipesService.getFavoriteRecipe(this.$store.state.token, this.recipe.id)
-      this.likedStatus = !(favorite.recipes.length === 0)
-      return !(favorite.recipes.length === 0)
+      if (this.loggedIn) {
+        const favorite = await PopularRecipesService.getFavoriteRecipe(this.$store.state.token, this.recipe.id)
+        this.likedStatus = !(favorite.recipes.length === 0)
+      }
     }
   }
 }
