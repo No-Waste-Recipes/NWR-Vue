@@ -64,10 +64,12 @@ export default class FooterComponent extends Vue {
 
 <style lang="sass" scoped>
     .Footer
+        height: 300px
         width: 100%
         background: #F6F4F5
 
         .md-layout
+            height: 100%
             width: 70%
             margin: auto
 
