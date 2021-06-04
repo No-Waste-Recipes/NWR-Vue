@@ -198,7 +198,7 @@ export default class CreateRecipeComponent extends Vue {
       this.fileError = true
       error = true
     }
-    if (!this.descriptionChanged) {
+    if (!this.descriptionChanged && !this.isUpdating) {
       this.DescriptionError = true
       error = true
     }
@@ -225,6 +225,7 @@ export default class CreateRecipeComponent extends Vue {
 
     if (this.isUpdating) {
       console.log('...........updating//////')
+      console.log(formData.get('photo'))
       RecipeService.updateRecipe(formData, this.$route.params.slug, this.$store.state.token).then(() => this.$router.push('/')).catch(() => console.log('er is iets fout gegaan check backend'))
     } else {
       console.log('...........creating//////')
