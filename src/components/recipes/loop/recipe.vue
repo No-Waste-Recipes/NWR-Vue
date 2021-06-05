@@ -7,6 +7,9 @@
           {{ingredient.ingredient.name}}
         </div>
       </div>
+
+      <div v-if='image' class="image" :style="{ backgroundImage: `url(http://localhost:3000/${recipe.photo})` }"/>
+
     </div>
   </RouterLink>
 </template>
@@ -16,7 +19,8 @@ export default {
   name: 'recipe',
   props: {
     recipe: {},
-    selectedIngredients: {}
+    selectedIngredients: {},
+    image: Boolean
   },
   methods: {
     inIngredients (name) {
@@ -33,8 +37,18 @@ export default {
 <style scoped lang="sass">
 .recipe
   background-color: #FFF
-  padding: 10px 5px
+  padding: 10px 8px
   text-align: left
+  height: 100%
+
+  h2
+    margin: 0 0 8px 0
+
+  .image
+    height: 150px
+    background-position: center
+    border-radius: 10px
+    background-size: cover
 
   .ingredient
     display: inline-block
