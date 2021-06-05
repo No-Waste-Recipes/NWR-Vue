@@ -34,4 +34,14 @@ const deleteRecipe = async (id: number, token: string) => {
   return res.data
 }
 
-export default { getIngredients, getRecipe, placeComment, createRecipe, deleteComment, deleteRecipe }
+const reportRecipe = async (slug: any, token: string) => {
+  const res = await axios.put('http://localhost:3000/recipes/' + slug + '/report', {}, { headers: { Authorization: `Bearer ${token}` } })
+  return res.data
+}
+
+const reportComment = async (slug: any, id: any, token: string) => {
+  const res = await axios.put('http://localhost:3000/recipes/' + slug + '/comment/' + id + '/report', {}, { headers: { Authorization: `Bearer ${token}` } })
+  return res.data
+}
+
+export default { getIngredients, getRecipe, placeComment, createRecipe, deleteComment, deleteRecipe, reportComment, reportRecipe }
