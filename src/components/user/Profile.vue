@@ -17,6 +17,18 @@
       <label>Last name</label>
       <md-input v-model="user.last_name" :readonly="!update"></md-input>
     </md-field>
+    <md-field :md-clearable="update" v-if="update">
+      <label>Password</label>
+      <md-input v-model="user.password"></md-input>
+    </md-field>
+    <md-field  v-if="update" :md-clearable="update">
+      <label>New password</label>
+      <md-input v-model="user.newPassword"></md-input>
+    </md-field>
+    <md-field :md-clearable="update" v-if="update">
+      <label>Repeat new password</label>
+      <md-input v-model="user.repeatPassword"></md-input>
+    </md-field>
     <md-field v-if="user.description && user.description.length > 0" :md-clearable="update">
       <label>Description</label>
       <md-input v-model="user.description" :readonly="!update"></md-input>
@@ -72,7 +84,8 @@ export default {
       user: Object,
       update: false,
       active: false,
-      loggedIn: this.$store.getters.isLoggedIn
+      loggedIn: this.$store.getters.isLoggedIn,
+      newPassword: ''
     }
   },
   created () {
@@ -93,6 +106,7 @@ export default {
       this.update = this.update !== true
     },
     async updateUser () {
+      console.log(this.user)
       UserService.updateUserProfile(this.$store.state.token, this.user)
         .then(
           event => {
@@ -100,7 +114,7 @@ export default {
             this.$set(this, 'user', event.user)
             this.update = false
           }
-        )
+        ).catch(err => console.log(err))
     },
     async deleteUser () {
       UserService.deleteUserProfile(this.$store.state.token)
