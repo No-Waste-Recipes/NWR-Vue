@@ -107,8 +107,8 @@ import RecipeService from '@/services//RecipeService'
 })
 export default class CreateRecipeComponent extends Vue {
   editor: Editor
-  title: '';
-  titleError: boolean;
+  title: ''
+  titleError: boolean
   Description: ''
   DescriptionError: boolean
   ingredientError: boolean
