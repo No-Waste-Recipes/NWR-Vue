@@ -22,7 +22,7 @@
             </md-field>
             <br/>
             <div :class="{'md-invalid': this.ingredientError}">
-              <searchbar :homepage="false" :selected-ingredients="ingredient"/>
+              <searchbar :homepage="false" :selected-ingredients="ingredient" :updating="true"/>
               <span class="md-error" v-if="ingredientError">No ingredients selected</span>
             </div>
             <br/>
@@ -227,6 +227,7 @@ export default class CreateRecipeComponent extends Vue {
     formData.append('status', status)
 
     if (this.isUpdating) {
+      console.log(this.$route.params.slug)
       RecipeService.updateRecipe(formData, this.$route.params.slug, this.$store.state.token).then(() => this.$router.push('/')).catch(() => console.log('er is iets fout gegaan check backend'))
     } else {
       RecipeService.createRecipe(formData, this.$store.state.token).then(() => this.$router.push('/')).catch(() => console.log('er is iets fout gegaan check backend'))

@@ -1,7 +1,7 @@
 <template>
   <div class="recipe-overview">
     <div class="recipe-searchbar">
-      <searchbar :selectedIngredients="ingredients" :homepage="false"></searchbar>
+      <searchbar :selectedIngredients="ingredients" :homepage="false" :updating="false"></searchbar>
     </div>
     <div class="md-layout md-gutter">
       <div class="md-layout-item md-size-30">
