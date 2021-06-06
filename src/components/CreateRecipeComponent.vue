@@ -176,11 +176,11 @@ export default class CreateRecipeComponent extends Vue {
           this.title = event.result.title
           this.editor.setContent(event.result.description)
           const length = event.result.ingredients.length - 1
-          console.log(length)
+
           for (let i = 0; i <= length; i++) {
             this.ingredient.push(JSON.parse(JSON.stringify(event.result.ingredients[i].ingredient)))
           }
-          console.log(this.ingredient)
+
           this.isFilePreFilled = true
           this.file = event.result.photo
         }
@@ -224,11 +224,8 @@ export default class CreateRecipeComponent extends Vue {
     formData.append('status', status)
 
     if (this.isUpdating) {
-      console.log('...........updating//////')
-      console.log(formData.get('photo'))
       RecipeService.updateRecipe(formData, this.$route.params.slug, this.$store.state.token).then(() => this.$router.push('/')).catch(() => console.log('er is iets fout gegaan check backend'))
     } else {
-      console.log('...........creating//////')
       RecipeService.createRecipe(formData, this.$store.state.token).then(() => this.$router.push('/')).catch(() => console.log('er is iets fout gegaan check backend'))
     }
   }
