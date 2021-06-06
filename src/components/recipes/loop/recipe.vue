@@ -2,7 +2,7 @@
   <RouterLink :to="{ name: 'RecipeDetail', params: { slug: recipe.slug }}">
     <div class="recipe md-elevation-3">
       <h2>{{recipe.title}}</h2>
-      <div class="ingredients" v-if="selectedIngredients && selectedIngredients.length > 0">
+      <div class="ingredients">
         <div class="ingredient" v-bind:class="{ 'active': inIngredients(ingredient.ingredient.name) }" v-for="ingredient in recipe.ingredients" :key='ingredient.id'>
           {{ingredient.ingredient.name}}
         </div>
