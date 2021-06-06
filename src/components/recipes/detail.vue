@@ -126,7 +126,7 @@ export default {
         )
     },
     async reportRecipe () {
-      RecipeService.reportRecipe(this.$route.params.slug, this.$store.state.token)
+      RecipeService.reportRecipe(this.$route.params.slug, true, this.$store.state.token)
         .then(
           () => {
             this.reportCommentStatus = true
@@ -134,7 +134,7 @@ export default {
         )
     },
     async reportComment (comment) {
-      RecipeService.reportComment(this.$route.params.slug, comment.id, this.$store.state.token)
+      RecipeService.reportComment(this.$route.params.slug, true, comment.id, this.$store.state.token)
         .then(
           () => {
             this.reportCommentStatus = true

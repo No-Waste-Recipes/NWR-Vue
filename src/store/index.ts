@@ -20,6 +20,8 @@ export default new Vuex.Store({
       state.status = 'success'
       state.token = token
       state.user = user
+      state.userId = user.id
+      state.userRole = user.userRole
     },
     AuthError (state) {
       state.status = 'error'
