@@ -216,7 +216,10 @@ export default class CreateRecipeComponent extends Vue {
     }
 
     const formData = new FormData()
-    formData.append('photo', this.file)
+    if (!this.isFilePreFilled) {
+      formData.append('photo', this.file)
+    }
+
     formData.append('title', this.title)
     formData.append('description', this.editor.getHTML())
     formData.append('ingredients', JSON.stringify(this.ingredient))
