@@ -109,7 +109,6 @@ export default {
       this.update = this.update !== true
     },
     async updateUser () {
-      console.log(this.user)
       UserService.updateUserProfile(this.$store.state.token, this.user)
         .then(
           event => {
