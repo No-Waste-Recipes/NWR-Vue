@@ -7,6 +7,10 @@
       <div class="report-recipe" v-if="loggedIn" v-on:click="reportRecipe">
         Report
       </div>
+      <div class="edit-recipe" v-if="canDeleteRecipe()">
+        <RouterLink :to="{ name: 'EditRecipeView', params: { slug: recipe.slug }}">Edit</RouterLink>
+      </div>
+
       <md-dialog-confirm
         :md-active.sync="clickDeleteRecipe"
         md-title="Delete your recipe?"
