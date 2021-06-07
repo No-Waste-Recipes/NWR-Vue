@@ -10,23 +10,23 @@
         <md-card-content>
           <md-field :class="getValidationClass('username')">
             <label for="username">Username</label>
-            <md-input type="text" name="email" id="username" v-model="form.username" />
-            <span class="md-error" v-if="!$v.form.email.required">The email is required</span>
-            <span class="md-error" v-else-if="!$v.form.email.email">Invalid email</span>
+            <md-input type="text" name="username" id="username" v-model="form.username" />
+            <span class="md-error" v-if="!$v.form.username.required">The username is required</span>
+            <span class="md-error" v-else-if="!$v.form.username.minLength">The username needs to be at least 3 characters</span>
           </md-field>
 
           <md-field :class="getValidationClass('firstName')">
             <label for="firstName">First name</label>
             <md-input type="text" name="firstName" id="firstName" v-model="form.firstName" />
-            <span class="md-error" v-if="!$v.form.email.required">The email is required</span>
-            <span class="md-error" v-else-if="!$v.form.email.email">Invalid email</span>
+            <span class="md-error" v-if="!$v.form.firstName.required">The first name is required</span>
+            <span class="md-error" v-else-if="!$v.form.firstName.minLength">First name needs to be at least 3 characters</span>
           </md-field>
 
           <md-field :class="getValidationClass('lastName')">
             <label for="lastName">Last name</label>
             <md-input type="text" name="lastName" id="lastName" v-model="form.lastName" />
-            <span class="md-error" v-if="!$v.form.email.required">The email is required</span>
-            <span class="md-error" v-else-if="!$v.form.email.email">Invalid email</span>
+            <span class="md-error" v-if="!$v.form.lastName.required">The last name is required</span>
+            <span class="md-error" v-else-if="!$v.form.lastName.minLength">Last name needs to be at least 3 characters</span>
           </md-field>
 
           <md-field :class="getValidationClass('email')">
@@ -39,14 +39,14 @@
           <md-field :class="getValidationClass('password')">
             <label for="password">Password</label>
             <md-input type="password" name="password" id="password" v-model="form.password" />
-            <span class="md-error" v-if="!$v.form.email.required">The email is required</span>
-            <span class="md-error" v-else-if="!$v.form.email.email">Invalid email</span>
+            <span class="md-error" v-if="!$v.form.password.required">The password is required</span>
+            <span class="md-error" v-else-if="!$v.form.password.minLength">The password needs to be at least 6 characters</span>
           </md-field>
 
           <md-field :class="getValidationClass('passwordConfirmation')">
             <label for="passwordConfirmation">Password confirmation</label>
             <md-input type="password" name="passwordConfirmation" id="passwordConfirmation" v-model="form.passwordConfirmation" />
-            <span class="md-error" v-if="!$v.form.email.required">The email is required</span>
+            <span class="md-error" v-if="!$v.form.email.required">The password confirmation is required</span>
             <span class="md-error" v-else-if="!$v.form.email.email">Invalid email</span>
           </md-field>
         </md-card-content>
