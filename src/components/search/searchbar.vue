@@ -10,7 +10,7 @@
           </div>
         </md-field>
       </div>
-      <div class="search-results md-elevation-5" v-if="searchOpen">
+      <div class="search-results md-elevation-5" v-if="searchOpen && (ingredientName.length > 0 || selectedIngredients.length > 0)">
         <div class="search-results-ingredients-selected-tab result-tab" v-if="homepage">
           <h4>Currently selected ingredients:</h4>
           <div class="search-results-ingredients-selected" v-for="(selectedIngredient, index) in selectedIngredients"
@@ -53,7 +53,7 @@
             <md-input class="quantity-ingredient-input"></md-input>
           </md-field>
           <md-field class="volume-ingredient volume">
-            <md-select v-model="volume" id="volume-label" placeholder="Hoeveelheid">
+            <md-select id="volume-label" placeholder="Hoeveelheid">
               <md-option value="gram">gram</md-option>
               <md-option value="milliliter">milliliter</md-option>
               <md-option value="stuks">stuks</md-option>
@@ -79,7 +79,7 @@ Vue.use(vClickOutside)
 export default {
   name: 'searchbar',
   props: {
-    selectedIngredients: [],
+    selectedIngredients: Array,
     homepage: Boolean,
     updating: Boolean
   },
