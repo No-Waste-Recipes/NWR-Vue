@@ -19,6 +19,15 @@ const createRecipe = async (recipe: any, token: string) => {
   return res.data
 }
 
+const updateRecipe = async (recipe: any, slug: string, token: string) => {
+  const res = await axios.post('http://localhost:3000/recipes/' + slug, recipe, {
+    headers: {
+      'Content-Type': 'multipart/form-data', Authorization: `Bearer ${token}`
+    }
+  })
+  return res.data
+}
+
 const placeComment = async (slug: string, data: { text: string }, token: string) => {
   const res = await axios.post('http://localhost:3000/recipes/' + slug + '/comment', data, { headers: { Authorization: `Bearer ${token}` } })
   return res.data
@@ -34,4 +43,4 @@ const deleteRecipe = async (id: number, token: string) => {
   return res.data
 }
 
-export default { getIngredients, getRecipe, placeComment, createRecipe, deleteComment, deleteRecipe }
+export default { getIngredients, getRecipe, placeComment, createRecipe, deleteComment, deleteRecipe, updateRecipe }
