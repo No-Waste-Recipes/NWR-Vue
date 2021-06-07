@@ -10,4 +10,14 @@ const approveRecipe = async (slug: string, status: string, token: string) => {
   return res.data
 }
 
-export default { getApproveRecipes, approveRecipe }
+const getReportedRecipes = async (token: string) => {
+  const res = await axios.get('http://localhost:3000/recipes/reports', { headers: { Authorization: `Bearer ${token}` } })
+  return res.data
+}
+
+const getReportedComments = async (token: string) => {
+  const res = await axios.get('http://localhost:3000/recipes/comment/reports', { headers: { Authorization: `Bearer ${token}` } })
+  return res.data
+}
+
+export default { getApproveRecipes, approveRecipe, getReportedComments, getReportedRecipes }

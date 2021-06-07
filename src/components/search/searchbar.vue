@@ -80,7 +80,8 @@ export default {
   name: 'searchbar',
   props: {
     selectedIngredients: Array,
-    homepage: Boolean
+    homepage: Boolean,
+    updating: Boolean
   },
   directives: {
     clickOutside: vClickOutside.directive
@@ -105,7 +106,9 @@ export default {
     removeSelectedIngredient (index) {
       this.ingredients.push(this.selectedIngredients[index])
       this.$delete(this.selectedIngredients, index)
-      this.goToOverview()
+      if (!this.updating) {
+        this.goToOverview()
+      }
     },
     setSelectedIngredient (index) {
       this.selectedIngredients.push(this.ingredients[index])

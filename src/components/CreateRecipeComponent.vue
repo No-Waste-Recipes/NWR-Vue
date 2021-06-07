@@ -6,7 +6,7 @@
         <hr class="divider"/>
         <div class="content">
           <form @submit.prevent="validateRecipe">
-            <md-field class="inputField" :class="{'md-invalid': this.titleError}">
+            <md-field class="inputField" :class="{'md-invalid': this.titleError}" >
                 <label>Title</label>
                 <md-input v-model="title"></md-input>
                 <span class="md-error" v-if="titleError">Invalid title</span>
@@ -22,7 +22,7 @@
             </md-field>
             <br/>
             <div :class="{'md-invalid': this.ingredientError}">
-              <searchbar :homepage="false" :selected-ingredients="ingredient"/>
+              <searchbar :homepage="false" :selected-ingredients="ingredient" :updating="true"/>
               <span class="md-error" v-if="ingredientError">No ingredients selected</span>
             </div>
             <br/>
@@ -66,7 +66,6 @@
                 <editor-content class="editor_content md-elevation-3" :editor="editor" v-model="Description" />
                 <span class="md-error" v-if="DescriptionError">Invalid description</span>
             </div>
-            <!-- TODO maak andere searchbar voor tags -->
             <md-field class="inputField">
                 <label>Tags</label>
                 <md-input v-model="Tags"></md-input>
@@ -108,16 +107,19 @@ import RecipeService from '@/services//RecipeService'
 })
 export default class CreateRecipeComponent extends Vue {
   editor: Editor
-  title: '';
-  titleError: boolean;
+  title: ''
+  titleError: boolean
   Description: ''
   DescriptionError: boolean
   ingredientError: boolean
-  ingredient: []
+  ingredient: object[] = []
   Tags: []
   descriptionChanged: boolean
+  isFilePreFilled: boolean
   file: ''
   fileError: boolean
+  isUpdating: boolean
+
   data () {
     return {
       title: '',
@@ -147,12 +149,42 @@ export default class CreateRecipeComponent extends Vue {
     }
   }
 
+  created () {
+    if (this.$route.params.slug) {
+      this.isUpdating = true
+      this.getRecipe()
+    }
+  }
+
   public uploadFile (event) {
     this.file = event.target.files[0]
+    this.isFilePreFilled = false
   }
 
   public getFileUrl () {
+    if (this.isFilePreFilled) {
+      return `http://localhost:3000/${this.file}`
+    }
     return URL.createObjectURL(this.file)
+  }
+
+  public async getRecipe () {
+    await RecipeService.getRecipe(this.$route.params.slug)
+      .then(
+        event => {
+          this.$set(this, 'recipe', event.result)
+          this.title = event.result.title
+          this.editor.setContent(event.result.description)
+          const length = event.result.ingredients.length - 1
+
+          for (let i = 0; i <= length; i++) {
+            this.ingredient.push(JSON.parse(JSON.stringify(event.result.ingredients[i].ingredient)))
+          }
+
+          this.isFilePreFilled = true
+          this.file = event.result.photo
+        }
+      )
   }
 
   public checkData (): void {
@@ -166,7 +198,7 @@ export default class CreateRecipeComponent extends Vue {
       this.fileError = true
       error = true
     }
-    if (!this.descriptionChanged) {
+    if (!this.descriptionChanged && !this.isUpdating) {
       this.DescriptionError = true
       error = true
     }
@@ -184,14 +216,21 @@ export default class CreateRecipeComponent extends Vue {
     }
 
     const formData = new FormData()
-    formData.append('photo', this.file)
+    if (!this.isFilePreFilled) {
+      formData.append('photo', this.file)
+    }
+
     formData.append('title', this.title)
     formData.append('description', this.editor.getHTML())
     formData.append('ingredients', JSON.stringify(this.ingredient))
     formData.append('Tags', JSON.stringify(this.Tags))
     formData.append('status', status)
 
-    RecipeService.createRecipe(formData, this.$store.state.token).then(() => this.$router.push('/')).catch(() => console.log('er is iets fout gegaan check backend'))
+    if (this.isUpdating) {
+      RecipeService.updateRecipe(formData, this.$route.params.slug, this.$store.state.token).then(() => this.$router.push('/')).catch(() => console.log('er is iets fout gegaan check backend'))
+    } else {
+      RecipeService.createRecipe(formData, this.$store.state.token).then(() => this.$router.push('/')).catch(() => console.log('er is iets fout gegaan check backend'))
+    }
   }
 
   validateRecipe () {

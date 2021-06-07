@@ -1,7 +1,7 @@
 <template>
   <div class="home">
     <img width='350px' src="../assets/Logo-with-Text.png">
-    <searchbar :homepage="true" :selected-ingredients="[]"/>
+    <searchbar :homepage="true" :selected-ingredients="[]" :updating="false"/>
     <HomeRecipes/>
   </div>
 </template>
