@@ -13,6 +13,7 @@ import AdminView from '../views/AdminView.vue'
 import AdminRecipeApprove from '../views/AdminRecipeApprove.vue'
 import AdminRecipeApproveDetail from '../views/AdminRecipeApproveDetail.vue'
 import AdminUsersOverview from '../views/AdminUsersOverview.vue'
+import AdminReportView from '../views/AdminReportView.vue'
 
 Vue.use(VueRouter)
 
@@ -110,6 +111,15 @@ const routes: Array<RouteConfig> = [
     path: '/admin/recipe/approve/:slug',
     name: 'AdminRecipeApproveDetail',
     component: AdminRecipeApproveDetail,
+    meta: {
+      admin: true,
+      requiresAuth: true
+    }
+  },
+  {
+    path: '/admin/reports',
+    name: 'AdminReports',
+    component: AdminReportView,
     meta: {
       admin: true,
       requiresAuth: true

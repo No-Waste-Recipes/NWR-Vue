@@ -4,6 +4,9 @@
       <div class="delete-recipe" v-if="canDeleteRecipe()" v-on:click="clickDeleteRecipe = true">
         Verwijderen
       </div>
+      <div class="report-recipe" v-if="loggedIn" v-on:click="reportRecipe">
+        Report
+      </div>
       <div class="edit-recipe" v-if="canDeleteRecipe()">
         <RouterLink :to="{ name: 'EditRecipeView', params: { slug: recipe.slug }}">Edit</RouterLink>
       </div>
@@ -53,6 +56,9 @@
           <div class="delete-comment" v-if="canShowDelete(comment)" v-on:click="deleteComment(comment, index)">
             Verwijderen
           </div>
+          <div class="report-recipe" v-if="loggedIn" v-on:click="reportComment(comment)">
+            Report
+          </div>
           <div class="user">
             {{comment.user.username}}
           </div>
@@ -61,6 +67,14 @@
           </div>
         </div>
       </div>
+      <md-dialog-alert
+        :md-active.sync="reportRecipeStatus"
+        md-content="Het recept is gereport"
+        md-confirm-text="Oke" />
+      <md-dialog-alert
+        :md-active.sync="reportCommentStatus"
+        md-content="De comment is gereport"
+        md-confirm-text="Oke" />
       <div v-if="loggedIn" class="place-comment">
         <md-field :class="{'md-invalid': this.commentError}">
           <label>Plaats comment</label>
@@ -87,7 +101,9 @@ export default {
       loggedIn: this.$store.getters.isLoggedIn,
       commentError: false,
       likedStatus: null,
-      clickDeleteRecipe: false
+      clickDeleteRecipe: false,
+      reportRecipeStatus: false,
+      reportCommentStatus: false
     }
   },
   created () {
@@ -110,6 +126,22 @@ export default {
         .then(
           () => {
             this.$delete(this.recipe.comments, index)
+          }
+        )
+    },
+    async reportRecipe () {
+      RecipeService.reportRecipe(this.$route.params.slug, true, this.$store.state.token)
+        .then(
+          () => {
+            this.reportCommentStatus = true
+          }
+        )
+    },
+    async reportComment (comment) {
+      RecipeService.reportComment(this.$route.params.slug, true, comment.id, this.$store.state.token)
+        .then(
+          () => {
+            this.reportCommentStatus = true
           }
         )
     },
