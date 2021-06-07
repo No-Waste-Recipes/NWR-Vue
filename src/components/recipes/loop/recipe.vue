@@ -20,7 +20,7 @@ export default {
   props: {
     recipe: {},
     selectedIngredients: {},
-    image: Boolean
+    hasImage: Boolean
   },
   methods: {
     inIngredients (name) {
