@@ -1,23 +1,23 @@
 <template>
   <div class="reports">
       <h2>Recipes</h2>
-      <div v-for="recipe in this.reportedRecipesList" :key="recipe.id">
+      <div v-for="(recipe, index) in this.reportedRecipesList" :key="recipe.id">
           <div class="recipe">
             <RouterLink :to="{ name: 'RecipeDetail', params: { slug: recipe.slug }}">
               {{ recipe.title }}
             </RouterLink>
-            <a v-on:click="approveRecipe(recipe.slug)">Approve</a>
-            <a v-on:click="deleteRecipe(recipe.slug)">Delete</a>
+            <a v-on:click="approveRecipe(recipe.slug, index)">Approve</a>
+            <a v-on:click="deleteRecipe(recipe.slug, index)" class="delete">Delete</a>
           </div>
       </div>
       <h2>Comments</h2>
-      <div v-for="comment in this.reportedCommentsList" :key="comment.id">
+      <div v-for="(comment, index) in this.reportedCommentsList" :key="comment.id">
         <div class="comment">
           <RouterLink :to="{ name: 'RecipeDetail', params: { slug: comment.recipe.slug }}">
             {{comment.text}}
           </RouterLink>
-          <a v-on:click="approveComment(comment.recipe.slug, comment)">Approve</a>
-          <a v-on:click="deleteComment(comment.recipe.slug, comment)">Delete</a>
+          <a v-on:click="approveComment(comment.recipe.slug, comment, index)">Approve</a>
+          <a v-on:click="deleteComment(comment.recipe.slug, comment, index)" class="delete">Delete</a>
         </div>
       </div>
   </div>
@@ -55,44 +55,43 @@ export default class ApproveReport extends Vue {
     AdminRecipeService.getReportedComments(this.$store.state.token)
       .then(
         event => {
-          console.log(event.result)
           this.$set(this, 'reportedCommentsList', event.result)
         }
       )
   }
 
-  async approveRecipe (slug) {
+  async approveRecipe (slug, index) {
     RecipeService.reportRecipe(slug, false, this.$store.state.token)
       .then(
         () => {
-          this.reportCommentStatus = true
+          this.$delete(this.reportedRecipesList, index)
         }
       )
   }
 
-  async approveComment (slug, comment) {
+  async approveComment (slug, comment, index) {
     RecipeService.reportComment(slug, false, comment.id, this.$store.state.token)
       .then(
         () => {
-          this.reportCommentStatus = true
+          this.$delete(this.reportedCommentsList, index)
         }
       )
   }
 
-  async deleteRecipe (recipeId) {
+  async deleteRecipe (recipeId, index) {
     RecipeService.deleteRecipe(recipeId, this.$store.state.token)
       .then(
         () => {
-          this.$router.push('/')
+          this.$delete(this.reportedRecipesList, index)
         }
       )
   }
 
-  async deleteComment (recipeSlug, comment) {
+  async deleteComment (recipeSlug, comment, index) {
     RecipeService.deleteComment(recipeSlug, comment.id, this.$store.state.token)
       .then(
         () => {
-          this.$router.push('/')
+          this.$delete(this.reportedCommentsList, index)
         }
       )
   }
@@ -106,6 +105,10 @@ export default class ApproveReport extends Vue {
 
   a {
     display: block;
+  }
+
+  div a.delete {
+    color: red;
   }
 
   .recipe, .comment {

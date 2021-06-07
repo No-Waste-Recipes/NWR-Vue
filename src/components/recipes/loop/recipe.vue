@@ -8,7 +8,7 @@
         </div>
       </div>
 
-      <div v-if='image' class="image" :style="{ backgroundImage: `url(http://localhost:3000/${recipe.photo})` }"/>
+      <div v-if='hasImage' class="image" :style="{ backgroundImage: `url(http://localhost:3000/${recipe.photo})` }"/>
 
     </div>
   </RouterLink>
@@ -40,6 +40,7 @@ export default {
   padding: 10px 8px
   text-align: left
   height: 100%
+  margin-bottom: 20px
 
   h2
     margin: 0 0 8px 0
