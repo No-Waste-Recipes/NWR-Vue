@@ -4,7 +4,7 @@
       <div>
         <div class='md-headline'>Favorited by you</div>
         <div class='block-layout'>
-          <Recipe class='recipe-box' v-for='recipe in favoriteRecipes' :key='recipe.id' :recipe='recipe.recipe' :image='true'/>
+          <Recipe class='recipe-box' v-for='recipe in favoriteRecipes' :key='recipe.id' :recipe='recipe.recipe' :hasImage='true'/>
         </div>
       </div>
     </div>
@@ -13,7 +13,7 @@
       <div>
         <div class='md-headline title'>Popular Recipes</div>
         <div class='block-layout'>
-          <Recipe class='recipe-box' v-for='recipe in popularRecipes' :key='recipe.id' :recipe='recipe' :image='true'/>
+          <Recipe class='recipe-box' v-for='recipe in popularRecipes' :key='recipe.id' :recipe='recipe' :hasImage='true'/>
         </div>
       </div>
     </div>

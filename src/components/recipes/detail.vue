@@ -1,14 +1,16 @@
 <template>
   <div class="recipe">
     <div class="block top">
-      <div class="delete-recipe" v-if="canDeleteRecipe()" v-on:click="clickDeleteRecipe = true">
-        Verwijderen
-      </div>
-      <div class="report-recipe" v-if="loggedIn" v-on:click="reportRecipe">
-        Report
-      </div>
-      <div class="edit-recipe" v-if="canDeleteRecipe()">
-        <RouterLink :to="{ name: 'EditRecipeView', params: { slug: recipe.slug }}">Edit</RouterLink>
+      <div class="button-container">
+        <div class="delete-recipe" v-if="canDeleteRecipe()" v-on:click="clickDeleteRecipe = true">
+          Verwijderen
+        </div>
+        <div class="report-recipe" v-if="loggedIn" v-on:click="reportRecipe">
+          Report
+        </div>
+        <div class="edit-recipe" v-if="canDeleteRecipe()">
+          <RouterLink :to="{ name: 'EditRecipeView', params: { slug: recipe.slug }}">Edit</RouterLink>
+        </div>
       </div>
 
       <md-dialog-confirm
@@ -53,11 +55,13 @@
       <div class="comments">
         <h3>Comments</h3>
         <div v-for="(comment, index) in recipe.comments" :key="comment.id" class="comment">
-          <div class="delete-comment" v-if="canShowDelete(comment)" v-on:click="deleteComment(comment, index)">
-            Verwijderen
-          </div>
-          <div class="report-recipe" v-if="loggedIn" v-on:click="reportComment(comment)">
-            Report
+          <div class="button-container-comment">
+            <div class="delete-comment" v-if="canShowDelete(comment)" v-on:click="deleteComment(comment, index)">
+              Verwijderen
+            </div>
+            <div class="report-recipe" v-if="loggedIn" v-on:click="reportComment(comment)">
+              Report
+            </div>
           </div>
           <div class="user">
             {{comment.user.username}}
@@ -133,7 +137,7 @@ export default {
       RecipeService.reportRecipe(this.$route.params.slug, true, this.$store.state.token)
         .then(
           () => {
-            this.reportCommentStatus = true
+            this.reportRecipeStatus = true
           }
         )
     },
@@ -203,6 +207,14 @@ export default {
   .recipe
     text-align: left
 
+    .button-container div
+      display: inline-block
+      margin-right: 15px
+      font-weight: bold
+      border: 2px solid currentColor
+      padding: 7px
+      border-radius: 4px
+
     .block
       background-color: #FFF
       padding: 40px
@@ -212,6 +224,13 @@ export default {
         cursor: pointer
 
       .comments
+
+        .button-container-comment
+          text-align: right
+          div
+            display: inline-block
+            margin-right: 5px
+
         .comment
           padding: 20px
           border: 3px solid #F6F4F5
@@ -278,4 +297,13 @@ export default {
       .author-name
         font-weight: bold
 
+    .edit-recipe
+      color: #448aff
+
+    .report-recipe
+      cursor: pointer
+      color: #3426F8
+
+      &:hover
+        text-decoration: underline
 </style>

@@ -4,6 +4,8 @@
     <RouterLink :to="{ name: 'AdminRecipeApprove'}">Approve recipes</RouterLink>
     <br>
     <RouterLink :to="{ name: 'AdminUserOverview'}">User overview</RouterLink>
+    <br>
+    <RouterLink :to="{ name: 'AdminReports'}">Reports</RouterLink>
   </div>
 </template>
 
